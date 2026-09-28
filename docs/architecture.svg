@@ -1,0 +1,110 @@
+<svg viewBox="0 0 1120 590" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="La reserva pública viaja del navegador a una función de Cloudflare Pages, que verifica el token con Turnstile y llama a un gateway con clave compartida antes de delegar en crear_reserva; el panel de administración entra directo por Supabase Auth y PostgREST bajo RLS. Ambos caminos convergen en PostgreSQL, que notifica altas nuevas al admin por Realtime.">
+  <defs>
+    <marker id="arrow-neutral" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5b6b62"/>
+    </marker>
+    <marker id="arrow-lime" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#d7f26d"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5fb8e8"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="590" rx="18" fill="#0b1410"/>
+
+  <!-- Grupo Supabase -->
+  <rect x="580" y="40" width="510" height="525" rx="14" fill="none" stroke="#33453b" stroke-width="1.5" stroke-dasharray="6 5"/>
+  <text x="602" y="67" font-family="system-ui, sans-serif" font-size="13" font-weight="700" letter-spacing="1.5" fill="#7f9488">SUPABASE</text>
+
+  <text x="375" y="24" font-family="system-ui, sans-serif" font-size="12" font-weight="700" letter-spacing="1.5" fill="#7f9488" text-anchor="middle">CLOUDFLARE</text>
+
+  <!-- ===== Camino público (emphasized, lime) ===== -->
+
+  <!-- Navegador público -->
+  <rect x="20" y="115" width="170" height="70" rx="10" fill="#122019" stroke="#33453b" stroke-width="1.5"/>
+  <text x="105" y="146" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#e8ece9" text-anchor="middle">Navegador</text>
+  <text x="105" y="163" font-family="system-ui, sans-serif" font-size="11" fill="#93a89c" text-anchor="middle">público</text>
+
+  <!-- Turnstile -->
+  <rect x="280" y="40" width="190" height="55" rx="10" fill="#122019" stroke="#d7f26d" stroke-width="2"/>
+  <text x="375" y="61" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#e8ece9" text-anchor="middle">Cloudflare Turnstile</text>
+  <text x="375" y="78" font-family="system-ui, sans-serif" font-size="11" fill="#93a89c" text-anchor="middle">siteverify()</text>
+
+  <!-- Pages Function -->
+  <rect x="280" y="115" width="190" height="70" rx="10" fill="#122019" stroke="#d7f26d" stroke-width="2"/>
+  <text x="375" y="146" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#e8ece9" text-anchor="middle">Pages Function</text>
+  <text x="375" y="163" font-family="system-ui, sans-serif" font-size="11" fill="#93a89c" text-anchor="middle">/api/reservar</text>
+
+  <!-- gateway_reservar -->
+  <rect x="610" y="115" width="190" height="70" rx="10" fill="#122019" stroke="#d7f26d" stroke-width="2"/>
+  <text x="705" y="146" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#e8ece9" text-anchor="middle">gateway_reservar()</text>
+  <text x="705" y="163" font-family="system-ui, sans-serif" font-size="11" fill="#93a89c" text-anchor="middle">hash + rate limit</text>
+
+  <!-- crear_reserva -->
+  <rect x="870" y="115" width="190" height="70" rx="10" fill="#122019" stroke="#d7f26d" stroke-width="2"/>
+  <text x="965" y="146" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#e8ece9" text-anchor="middle">crear_reserva()</text>
+  <text x="965" y="163" font-family="system-ui, sans-serif" font-size="11" fill="#93a89c" text-anchor="middle">motor de precios</text>
+
+  <!-- ===== Camino admin (neutral) ===== -->
+
+  <!-- Navegador admin -->
+  <rect x="20" y="255" width="170" height="60" rx="10" fill="#122019" stroke="#33453b" stroke-width="1.5"/>
+  <text x="105" y="281" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#e8ece9" text-anchor="middle">Navegador</text>
+  <text x="105" y="298" font-family="system-ui, sans-serif" font-size="11" fill="#93a89c" text-anchor="middle">admin</text>
+
+  <!-- Auth -->
+  <rect x="610" y="255" width="190" height="60" rx="10" fill="#122019" stroke="#33453b" stroke-width="1.5"/>
+  <text x="705" y="290" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#e8ece9" text-anchor="middle">Supabase Auth</text>
+
+  <!-- PostgREST / RPC -->
+  <rect x="610" y="375" width="190" height="60" rx="10" fill="#122019" stroke="#33453b" stroke-width="1.5"/>
+  <text x="705" y="410" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#e8ece9" text-anchor="middle">PostgREST / RPC</text>
+
+  <!-- Realtime -->
+  <rect x="610" y="485" width="190" height="60" rx="10" fill="#122019" stroke="#33453b" stroke-width="1.5"/>
+  <text x="705" y="520" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#e8ece9" text-anchor="middle">Realtime</text>
+
+  <!-- PostgreSQL (cilindro) -->
+  <g>
+    <ellipse cx="965" cy="273" rx="95" ry="18" fill="#122019" stroke="#33453b" stroke-width="1.5"/>
+    <path d="M870,273 L870,527 A95,18 0 0 0 1060,527 L1060,273" fill="#122019" stroke="#33453b" stroke-width="1.5"/>
+    <line x1="870" y1="273" x2="870" y2="527" stroke="#33453b" stroke-width="1.5"/>
+    <line x1="1060" y1="273" x2="1060" y2="527" stroke="#33453b" stroke-width="1.5"/>
+    <text x="965" y="410" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#e8ece9" text-anchor="middle">PostgreSQL</text>
+    <text x="965" y="430" font-family="system-ui, sans-serif" font-size="11" fill="#93a89c" text-anchor="middle">RLS por tabla</text>
+  </g>
+
+  <!-- ===== Flechas: camino público (lime) ===== -->
+  <line x1="190" y1="150" x2="276" y2="150" stroke="#d7f26d" stroke-width="1.75" marker-end="url(#arrow-lime)"/>
+  <text x="233" y="138" font-family="system-ui, sans-serif" font-size="11" fill="#c9dba8" text-anchor="middle">POST /api/reservar</text>
+
+  <line x1="375" y1="115" x2="375" y2="99" stroke="#d7f26d" stroke-width="1.75" marker-end="url(#arrow-lime)"/>
+  <text x="384" y="107" font-family="system-ui, sans-serif" font-size="11" fill="#c9dba8">valida token</text>
+
+  <line x1="470" y1="150" x2="606" y2="150" stroke="#d7f26d" stroke-width="1.75" marker-end="url(#arrow-lime)"/>
+  <text x="538" y="138" font-family="system-ui, sans-serif" font-size="11" fill="#c9dba8" text-anchor="middle">RPC + x-gateway-key</text>
+
+  <line x1="800" y1="150" x2="866" y2="150" stroke="#d7f26d" stroke-width="1.75" marker-end="url(#arrow-lime)"/>
+  <text x="833" y="138" font-family="system-ui, sans-serif" font-size="11" fill="#c9dba8" text-anchor="middle">ok</text>
+
+  <line x1="965" y1="185" x2="965" y2="251" stroke="#d7f26d" stroke-width="1.75" marker-end="url(#arrow-lime)"/>
+  <text x="974" y="220" font-family="system-ui, sans-serif" font-size="11" fill="#c9dba8">INSERT</text>
+
+  <!-- ===== Flechas: camino admin (neutral) ===== -->
+  <line x1="190" y1="285" x2="606" y2="285" stroke="#5b6b62" stroke-width="1.5" marker-end="url(#arrow-neutral)"/>
+  <text x="398" y="273" font-family="system-ui, sans-serif" font-size="11" fill="#93a89c" text-anchor="middle">login (email + password)</text>
+
+  <line x1="705" y1="315" x2="705" y2="371" stroke="#5b6b62" stroke-width="1.5" marker-end="url(#arrow-neutral)"/>
+  <text x="714" y="347" font-family="system-ui, sans-serif" font-size="11" fill="#93a89c">JWT</text>
+
+  <line x1="800" y1="405" x2="866" y2="405" stroke="#5b6b62" stroke-width="1.5" marker-end="url(#arrow-neutral)"/>
+  <text x="833" y="393" font-family="system-ui, sans-serif" font-size="11" fill="#93a89c" text-anchor="middle">bajo RLS</text>
+
+  <line x1="866" y1="515" x2="804" y2="515" stroke="#5b6b62" stroke-width="1.5" marker-end="url(#arrow-neutral)"/>
+  <text x="833" y="503" font-family="system-ui, sans-serif" font-size="11" fill="#93a89c" text-anchor="middle">on INSERT</text>
+
+  <!-- Push asíncrono de Realtime al admin -->
+  <line x1="608" y1="515" x2="156" y2="317" stroke="#5fb8e8" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrow-blue)"/>
+  <text x="380" y="398" font-family="system-ui, sans-serif" font-size="11" fill="#7fb8d9" text-anchor="middle">push: nueva reserva (async)</text>
+</svg>
