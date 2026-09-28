@@ -1,0 +1,133 @@
+/*
+ * PadelBallLogo — colores y microanimación del isotipo público.
+ *
+ * La pelota usa colores fijos (es la marca: lima neón en ambos temas); lo que
+ * cambia con el tema son las órbitas/halo, que en light necesitan un verde
+ * más profundo para no perderse contra el fondo sage.
+ *
+ * Todas las animaciones son lentas, de amplitud chica y corren en CSS (sin
+ * re-render de React). Cada propiedad animada vive en su propio elemento
+ * para no pisarse: el <svg> flota, .pbl-orbitas oscila, .pbl-orbitas-hover
+ * reacciona al hover, los trazos derivan su dashoffset y el halo respira.
+ * La pose sin animación ES la pose de diseño: con reduced-motion se apaga
+ * todo y el isotipo queda estático y completo.
+ */
+.pbl {
+  --pbl-orbita: #c7f24e;
+  --pbl-orbita-viva: #efffb0;
+  --pbl-halo: #c7f24e;
+  --pbl-particula: #e4ff8a;
+  overflow: visible;
+  animation: pbl-flotar 6.5s ease-in-out infinite alternate;
+}
+
+:root[data-theme="light"] .pbl {
+  --pbl-orbita: #6f9f1a;
+  --pbl-orbita-viva: #8cc21f;
+  --pbl-halo: #a9dc34;
+  --pbl-particula: #79a91f;
+}
+
+.pbl-halo-stop {
+  stop-color: var(--pbl-halo);
+}
+
+.pbl-cometa,
+.pbl-estela {
+  stroke: var(--pbl-orbita);
+}
+.pbl-cometa-cabeza {
+  stroke: var(--pbl-orbita-viva);
+}
+.pbl-particula {
+  fill: var(--pbl-particula);
+  opacity: 0.55;
+  animation: pbl-titilar 4.8s ease-in-out infinite alternate;
+}
+
+/* Origen en (0,0) del grupo = centro de la pelota (el padre ya trasladó). */
+.pbl-orbitas,
+.pbl-orbitas-hover {
+  transform-origin: 0 0;
+}
+.pbl-orbitas {
+  animation: pbl-oscilar 11s ease-in-out infinite alternate;
+}
+.pbl-orbitas-hover {
+  transition: transform 700ms var(--pub-ease);
+}
+
+.pbl-cometa,
+.pbl-estela {
+  animation: pbl-derivar 7s ease-in-out infinite alternate;
+}
+.pbl-estela {
+  animation-duration: 9s;
+  animation-delay: -2s;
+}
+
+.pbl-halo {
+  animation: pbl-respirar 5s ease-in-out infinite alternate;
+}
+
+@media (hover: hover) {
+  .pbl:hover .pbl-orbitas-hover {
+    transform: rotate(-9deg);
+  }
+}
+
+@keyframes pbl-flotar {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-1.25px);
+  }
+}
+
+@keyframes pbl-oscilar {
+  from {
+    transform: rotate(-2.5deg);
+  }
+  to {
+    transform: rotate(3deg);
+  }
+}
+
+@keyframes pbl-derivar {
+  from {
+    stroke-dashoffset: calc(var(--pbl-desde) * 1px);
+  }
+  to {
+    stroke-dashoffset: calc(var(--pbl-desde) * 1px - 5px);
+  }
+}
+
+@keyframes pbl-respirar {
+  from {
+    opacity: 0.6;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pbl-titilar {
+  from {
+    opacity: 0.2;
+  }
+  to {
+    opacity: 0.85;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pbl,
+  .pbl * {
+    animation: none !important;
+    transition: none !important;
+  }
+  .pbl:hover .pbl-orbitas-hover {
+    transform: none;
+  }
+}

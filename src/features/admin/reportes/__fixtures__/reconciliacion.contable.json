@@ -1,0 +1,999 @@
+{
+ "_doc": "Fixture sintético de reconciliación contable. NO editar a mano.",
+ "ahora": "2026-09-26T20:00:00-03:00",
+ "rangos": {
+  "W1": [
+   "2026-09-14",
+   "2026-09-20"
+  ],
+  "W2": [
+   "2026-09-21",
+   "2026-09-27"
+  ],
+  "TODO": [
+   "2026-09-14",
+   "2026-09-27"
+  ]
+ },
+ "truth": {
+  "W1": {
+   "cobrosEf": 2900000,
+   "cobrosTr": 3900000,
+   "reintEf": 0,
+   "reintTr": 0,
+   "corrEf": 0,
+   "corrTr": 0,
+   "venEf": 450000,
+   "venTr": 300000,
+   "devEf": 100000,
+   "devTr": 0,
+   "nMovimientos": 8,
+   "nVentas": 2,
+   "nDevoluciones": 1,
+   "netoEf": 3250000,
+   "netoTr": 4200000,
+   "neto": 7450000
+  },
+  "W2": {
+   "cobrosEf": 3117283,
+   "cobrosTr": 1817284,
+   "reintEf": 500000,
+   "reintTr": 0,
+   "corrEf": -1000000,
+   "corrTr": 1000000,
+   "venEf": 349999,
+   "venTr": 600000,
+   "devEf": 200000,
+   "devTr": 350000,
+   "nMovimientos": 10,
+   "nVentas": 3,
+   "nDevoluciones": 4,
+   "netoEf": 1767282,
+   "netoTr": 3067284,
+   "neto": 4834566
+  },
+  "TODO": {
+   "cobrosEf": 6017283,
+   "cobrosTr": 5717284,
+   "reintEf": 500000,
+   "reintTr": 0,
+   "corrEf": -1000000,
+   "corrTr": 1000000,
+   "venEf": 799999,
+   "venTr": 900000,
+   "devEf": 300000,
+   "devTr": 350000,
+   "nMovimientos": 18,
+   "nVentas": 5,
+   "nDevoluciones": 5,
+   "netoEf": 5017282,
+   "netoTr": 7267284,
+   "neto": 12284566
+  }
+ },
+ "reserva_pago_movimientos": [
+  {
+   "id": "b041a4eb-79d3-49ef-95b3-6b8ddaca30fd",
+   "tipo": "cobro",
+   "fecha": "2026-09-15",
+   "medio": "efectivo",
+   "creado": "2026-09-15T22:10:00+00:00",
+   "motivo": null,
+   "importe": 10000,
+   "actor_id": "11111111-1111-1111-1111-111111111111",
+   "reserva_id": "04f134d8-f493-49fe-8fb4-087b52502ea1",
+   "operacion_id": "af8c1cb3-fffc-46b6-9888-5282c224c3ba",
+   "reserva_fecha": "2026-09-15",
+   "reserva_nombre": "R1 efectivo",
+   "reserva_hora_fin": "19:00:00",
+   "reserva_turno_fijo": false,
+   "reserva_hora_inicio": "18:00:00"
+  },
+  {
+   "id": "aefdc7ad-0612-4d0a-8603-2c26eff8b9fb",
+   "tipo": "cobro",
+   "fecha": "2026-09-16",
+   "medio": "transferencia",
+   "creado": "2026-09-16T23:40:00+00:00",
+   "motivo": null,
+   "importe": 15000,
+   "actor_id": "11111111-1111-1111-1111-111111111111",
+   "reserva_id": "ac8a8cec-e707-47b4-8fe0-5a35c5340886",
+   "operacion_id": "1fed9219-d337-455a-bf51-184b32dcbd58",
+   "reserva_fecha": "2026-09-16",
+   "reserva_nombre": "R2 transferencia",
+   "reserva_hora_fin": "20:30:00",
+   "reserva_turno_fijo": false,
+   "reserva_hora_inicio": "19:00:00"
+  },
+  {
+   "id": "86e26060-3149-4b88-ae6b-cf314483c88f",
+   "tipo": "cobro",
+   "fecha": "2026-09-16",
+   "medio": "efectivo",
+   "creado": "2026-09-17T02:10:00+00:00",
+   "motivo": null,
+   "importe": 10000,
+   "actor_id": "11111111-1111-1111-1111-111111111111",
+   "reserva_id": "e390d5e7-96a0-4a51-8069-2fdc01154738",
+   "operacion_id": "42b952c4-b009-4c27-9dad-ad66ea27435f",
+   "reserva_fecha": "2026-09-16",
+   "reserva_nombre": "TF Miércoles",
+   "reserva_hora_fin": "23:00:00",
+   "reserva_turno_fijo": true,
+   "reserva_hora_inicio": "22:00:00"
+  },
+  {
+   "id": "2ca655d6-950d-4de8-8834-c755b4acf877",
+   "tipo": "cobro",
+   "fecha": "2026-09-17",
+   "medio": "transferencia",
+   "creado": "2026-09-18T00:05:00+00:00",
+   "motivo": null,
+   "importe": 6000,
+   "actor_id": "11111111-1111-1111-1111-111111111111",
+   "reserva_id": "ddac91d4-e8ef-4260-b95a-14639f05228a",
+   "operacion_id": "c34f545a-3ea5-4b52-bf70-065ac3f45ffe",
+   "reserva_fecha": "2026-09-17",
+   "reserva_nombre": "R3 mixto",
+   "reserva_hora_fin": "21:00:00",
+   "reserva_turno_fijo": false,
+   "reserva_hora_inicio": "20:00:00"
+  },
+  {
+   "id": "ddb0cad4-6a17-445e-a468-fa1025f90705",
+   "tipo": "cobro",
+   "fecha": "2026-09-17",
+   "medio": "efectivo",
+   "creado": "2026-09-18T00:05:00+00:00",
+   "motivo": null,
+   "importe": 4000,
+   "actor_id": "11111111-1111-1111-1111-111111111111",
+   "reserva_id": "ddac91d4-e8ef-4260-b95a-14639f05228a",
+   "operacion_id": "c34f545a-3ea5-4b52-bf70-065ac3f45ffe",
+   "reserva_fecha": "2026-09-17",
+   "reserva_nombre": "R3 mixto",
+   "reserva_hora_fin": "21:00:00",
+   "reserva_turno_fijo": false,
+   "reserva_hora_inicio": "20:00:00"
+  },
+  {
+   "id": "f056a4cb-7cf4-4654-88be-91b1935f087c",
+   "tipo": "cobro",
+   "fecha": "2026-09-18",
+   "medio": "efectivo",
+   "creado": "2026-09-19T01:10:00+00:00",
+   "motivo": null,
+   "importe": 5000,
+   "actor_id": "11111111-1111-1111-1111-111111111111",
+   "reserva_id": "9144fea2-ba9f-426b-82b8-40808705fbfa",
+   "operacion_id": "b7fa8586-9719-468d-b2a8-0e15bdc1b881",
+   "reserva_fecha": "2026-09-18",
+   "reserva_nombre": "R4 parcial + saldo otra semana",
+   "reserva_hora_fin": "22:00:00",
+   "reserva_turno_fijo": false,
+   "reserva_hora_inicio": "21:00:00"
+  },
+  {
+   "id": "285da826-0198-4bee-afa2-cf57cc8a26c9",
+   "tipo": "cobro",
+   "fecha": "2026-09-19",
+   "medio": "transferencia",
+   "creado": "2026-09-19T15:00:00+00:00",
+   "motivo": null,
+   "importe": 3000,
+   "actor_id": "11111111-1111-1111-1111-111111111111",
+   "reserva_id": "443fee4a-4ba6-4566-9aec-9a7f6b926ed2",
+   "operacion_id": "0dba51eb-615f-42c0-b7b0-3120378d26ce",
+   "reserva_fecha": "2026-09-26",
+   "reserva_nombre": "R8 seña turno futuro",
+   "reserva_hora_fin": "23:00:00",
+   "reserva_turno_fijo": false,
+   "reserva_hora_inicio": "22:00:00"
+  },
+  {
+   "id": "5039b510-4548-4639-836e-d2c3f4002946",
+   "tipo": "cobro",
+   "fecha": "2026-09-20",
+   "medio": "transferencia",
+   "creado": "2026-09-21T02:40:00+00:00",
+   "motivo": null,
+   "importe": 15000,
+   "actor_id": "11111111-1111-1111-1111-111111111111",
+   "reserva_id": "cf0c27f2-29e4-4a55-80b2-4951c8e7b6ca",
+   "operacion_id": "e8231f15-3d14-4dad-99de-66f3d8e4f972",
+   "reserva_fecha": "2026-09-20",
+   "reserva_nombre": "R6 domingo cruza medianoche",
+   "reserva_hora_fin": "01:00:00",
+   "reserva_turno_fijo": false,
+   "reserva_hora_inicio": "23:30:00"
+  },
+  {
+   "id": "81a17d7c-db5c-4e54-acdb-827221e26fd1",
+   "tipo": "cobro",
+   "fecha": "2026-09-22",
+   "medio": "transferencia",
+   "creado": "2026-09-22T12:30:00+00:00",
+   "motivo": null,
+   "importe": 2000,
+   "actor_id": "11111111-1111-1111-1111-111111111111",
+   "reserva_id": "9144fea2-ba9f-426b-82b8-40808705fbfa",
+   "operacion_id": "fefc6d7e-8a75-4100-9763-081bc4c329ed",
+   "reserva_fecha": "2026-09-18",
+   "reserva_nombre": "R4 parcial + saldo otra semana",
+   "reserva_hora_fin": "22:00:00",
+   "reserva_turno_fijo": false,
+   "reserva_hora_inicio": "21:00:00"
+  },
+  {
+   "id": "c7d42a83-e8a7-4235-90ec-f301aaa96680",
+   "tipo": "cobro",
+   "fecha": "2026-09-22",
+   "medio": "efectivo",
+   "creado": "2026-09-22T13:00:00+00:00",
+   "motivo": null,
+   "importe": 5000,
+   "actor_id": "11111111-1111-1111-1111-111111111111",
+   "reserva_id": null,
+   "operacion_id": "e7d72a38-7a33-4e14-9773-4676b09eea4c",
+   "reserva_fecha": "2026-09-25",
+   "reserva_nombre": "R11 seña reintegrada y eliminada",
+   "reserva_hora_fin": "19:00:00",
+   "reserva_turno_fijo": false,
+   "reserva_hora_inicio": "18:00:00"
+  },
+  {
+   "id": "f5268663-dd56-4aee-9863-9287b5a18834",
+   "tipo": "cobro",
+   "fecha": "2026-09-22",
+   "medio": "efectivo",
+   "creado": "2026-09-22T22:05:00+00:00",
+   "motivo": null,
+   "importe": 10000,
+   "actor_id": "11111111-1111-1111-1111-111111111111",
+   "reserva_id": "e928f958-cf9c-4bb5-b42c-cf5e3fc13049",
+   "operacion_id": "821f6efa-cf10-4dbc-864c-679442be03db",
+   "reserva_fecha": "2026-09-22",
+   "reserva_nombre": "R7 cobro en paralelo misma clave",
+   "reserva_hora_fin": "19:00:00",
+   "reserva_turno_fijo": false,
+   "reserva_hora_inicio": "18:00:00"
+  },
+  {
+   "id": "1a82f941-9a7f-436c-8bf2-456216c000bb",
+   "tipo": "cobro",
+   "fecha": "2026-09-23",
+   "medio": "efectivo",
+   "creado": "2026-09-23T14:00:00+00:00",
+   "motivo": null,
+   "importe": 10000,
+   "actor_id": "11111111-1111-1111-1111-111111111111",
+   "reserva_id": "c7290889-93b8-43b2-8f90-be16fe069f70",
+   "operacion_id": "bae8a883-7a94-4d52-a8f4-ddd5a747d78d",
+   "reserva_fecha": "2026-09-23",
+   "reserva_nombre": "R10 corrección de medio",
+   "reserva_hora_fin": "11:00:00",
+   "reserva_turno_fijo": false,
+   "reserva_hora_inicio": "10:00:00"
+  },
+  {
+   "id": "85415204-9251-46e7-b60b-bf0a213176ad",
+   "tipo": "correccion",
+   "fecha": "2026-09-23",
+   "medio": "transferencia",
+   "creado": "2026-09-23T15:00:00+00:00",
+   "motivo": "Se cargó efectivo pero fue transferencia",
+   "importe": 10000,
+   "actor_id": "11111111-1111-1111-1111-111111111111",
+   "reserva_id": "c7290889-93b8-43b2-8f90-be16fe069f70",
+   "operacion_id": "e8853574-6400-4299-9ae3-85e52df685e9",
+   "reserva_fecha": "2026-09-23",
+   "reserva_nombre": "R10 corrección de medio",
+   "reserva_hora_fin": "11:00:00",
+   "reserva_turno_fijo": false,
+   "reserva_hora_inicio": "10:00:00"
+  },
+  {
+   "id": "df33bc75-f1b8-4a4e-a78f-e3beb31c9917",
+   "tipo": "correccion",
+   "fecha": "2026-09-23",
+   "medio": "efectivo",
+   "creado": "2026-09-23T15:00:00+00:00",
+   "motivo": "Se cargó efectivo pero fue transferencia",
+   "importe": -10000,
+   "actor_id": "11111111-1111-1111-1111-111111111111",
+   "reserva_id": "c7290889-93b8-43b2-8f90-be16fe069f70",
+   "operacion_id": "e8853574-6400-4299-9ae3-85e52df685e9",
+   "reserva_fecha": "2026-09-23",
+   "reserva_nombre": "R10 corrección de medio",
+   "reserva_hora_fin": "11:00:00",
+   "reserva_turno_fijo": false,
+   "reserva_hora_inicio": "10:00:00"
+  },
+  {
+   "id": "f364af94-829a-4b2e-a439-67b9e4e4d527",
+   "tipo": "cobro",
+   "fecha": "2026-09-24",
+   "medio": "transferencia",
+   "creado": "2026-09-24T12:00:00+00:00",
+   "motivo": null,
+   "importe": 10000,
+   "actor_id": "11111111-1111-1111-1111-111111111111",
+   "reserva_id": "f5a84b9a-8d55-472e-b68b-85e569faef01",
+   "operacion_id": "4b5e450b-b39a-4def-b534-1f47c42bdd8d",
+   "reserva_fecha": "2026-09-23",
+   "reserva_nombre": "TF Miércoles",
+   "reserva_hora_fin": "23:00:00",
+   "reserva_turno_fijo": true,
+   "reserva_hora_inicio": "22:00:00"
+  },
+  {
+   "id": "a7a19a8f-b397-4ad4-bd07-c6a03a77730b",
+   "tipo": "cobro",
+   "fecha": "2026-09-24",
+   "medio": "efectivo",
+   "creado": "2026-09-24T14:05:00+00:00",
+   "motivo": null,
+   "importe": 6172.83,
+   "actor_id": "11111111-1111-1111-1111-111111111111",
+   "reserva_id": "12919c2c-8333-4375-b784-8e2fe14a3a25",
+   "operacion_id": "6a7427cf-83d9-47cf-af74-668a00859bf1",
+   "reserva_fecha": "2026-09-24",
+   "reserva_nombre": "R9 centavos",
+   "reserva_hora_fin": "11:00:00",
+   "reserva_turno_fijo": false,
+   "reserva_hora_inicio": "10:00:00"
+  },
+  {
+   "id": "f089f9b9-8bb4-4211-b3ca-16ca8699c8d5",
+   "tipo": "cobro",
+   "fecha": "2026-09-24",
+   "medio": "transferencia",
+   "creado": "2026-09-24T14:05:00+00:00",
+   "motivo": null,
+   "importe": 6172.84,
+   "actor_id": "11111111-1111-1111-1111-111111111111",
+   "reserva_id": "12919c2c-8333-4375-b784-8e2fe14a3a25",
+   "operacion_id": "6a7427cf-83d9-47cf-af74-668a00859bf1",
+   "reserva_fecha": "2026-09-24",
+   "reserva_nombre": "R9 centavos",
+   "reserva_hora_fin": "11:00:00",
+   "reserva_turno_fijo": false,
+   "reserva_hora_inicio": "10:00:00"
+  },
+  {
+   "id": "10b89b18-591e-4253-8b88-c6b78d2e007a",
+   "tipo": "reintegro",
+   "fecha": "2026-09-25",
+   "medio": "efectivo",
+   "creado": "2026-09-25T12:00:00+00:00",
+   "motivo": "Canceló: se devolvió la seña",
+   "importe": -5000,
+   "actor_id": "11111111-1111-1111-1111-111111111111",
+   "reserva_id": null,
+   "operacion_id": "f07adae5-0dbb-46d0-b04f-20b539efd3e4",
+   "reserva_fecha": "2026-09-25",
+   "reserva_nombre": "R11 seña reintegrada y eliminada",
+   "reserva_hora_fin": "19:00:00",
+   "reserva_turno_fijo": false,
+   "reserva_hora_inicio": "18:00:00"
+  }
+ ],
+ "ventas": [
+  {
+   "id": "f40b3c6e-6d9c-4e93-b763-9c8fb3878c26",
+   "fecha": "2026-09-13",
+   "total": 1000,
+   "creado": "2026-09-14T00:00:00+00:00",
+   "reservas": null,
+   "reserva_id": null,
+   "venta_items": [
+    {
+     "id": "7c83503e-1967-4d28-8bb0-a310f4bef187",
+     "creado": "2026-09-27T03:24:39.56054+00:00",
+     "cantidad": 1,
+     "subtotal": 1000,
+     "productos": {
+      "nombre": "Agua"
+     },
+     "producto_id": "67d71dd6-740b-4a15-9adc-e7a2d336e990",
+     "devoluciones": [
+      {
+       "cantidad": 1,
+       "medio_reembolso": "transferencia"
+      }
+     ],
+     "costo_unitario_snapshot": 400,
+     "precio_unitario_snapshot": 1000
+    }
+   ],
+   "pago_efectivo": 0,
+   "pago_transferencia": 1000
+  },
+  {
+   "id": "644901a6-16a2-46b4-9933-9978d9441d0b",
+   "fecha": "2026-09-15",
+   "total": 2000,
+   "creado": "2026-09-15T22:10:00+00:00",
+   "reservas": null,
+   "reserva_id": null,
+   "venta_items": [
+    {
+     "id": "d61b0fa5-7026-4b29-9a8d-8cd91d85c39d",
+     "creado": "2026-09-27T03:24:39.528623+00:00",
+     "cantidad": 2,
+     "subtotal": 2000,
+     "productos": {
+      "nombre": "Agua"
+     },
+     "producto_id": "67d71dd6-740b-4a15-9adc-e7a2d336e990",
+     "devoluciones": [
+      {
+       "cantidad": 1,
+       "medio_reembolso": "efectivo"
+      },
+      {
+       "cantidad": 1,
+       "medio_reembolso": "efectivo"
+      }
+     ],
+     "costo_unitario_snapshot": 400,
+     "precio_unitario_snapshot": 1000
+    }
+   ],
+   "pago_efectivo": 2000,
+   "pago_transferencia": 0
+  },
+  {
+   "id": "d2e9eaf7-29ad-498e-b450-15299608472e",
+   "fecha": "2026-09-17",
+   "total": 5500,
+   "creado": "2026-09-17T23:30:00+00:00",
+   "reservas": {
+    "id": "ddac91d4-e8ef-4260-b95a-14639f05228a",
+    "fecha": "2026-09-17",
+    "nombre": "R3 mixto",
+    "hora_fin": "21:00:00",
+    "confirmada": true,
+    "hora_inicio": "20:00:00"
+   },
+   "reserva_id": "ddac91d4-e8ef-4260-b95a-14639f05228a",
+   "venta_items": [
+    {
+     "id": "3ce6e183-7ce2-4b80-979c-02bb35560e93",
+     "creado": "2026-09-27T03:24:39.545694+00:00",
+     "cantidad": 1,
+     "subtotal": 2500,
+     "productos": {
+      "nombre": "Gatorade"
+     },
+     "producto_id": "02df958e-80bf-48c5-a8f2-a9c3018f0b4b",
+     "devoluciones": [],
+     "costo_unitario_snapshot": 1200,
+     "precio_unitario_snapshot": 2500
+    },
+    {
+     "id": "40fb0c3b-221d-4eaf-be99-d3843fe41834",
+     "creado": "2026-09-27T03:24:39.545694+00:00",
+     "cantidad": 3,
+     "subtotal": 3000,
+     "productos": {
+      "nombre": "Agua"
+     },
+     "producto_id": "67d71dd6-740b-4a15-9adc-e7a2d336e990",
+     "devoluciones": [
+      {
+       "cantidad": 1,
+       "medio_reembolso": "efectivo"
+      }
+     ],
+     "costo_unitario_snapshot": 400,
+     "precio_unitario_snapshot": 1000
+    }
+   ],
+   "pago_efectivo": 2500,
+   "pago_transferencia": 3000
+  },
+  {
+   "id": "18367089-c2b8-49e7-9795-8b025398b6ba",
+   "fecha": "2026-09-21",
+   "total": 6000,
+   "creado": "2026-09-21T03:20:00+00:00",
+   "reservas": {
+    "id": "cf0c27f2-29e4-4a55-80b2-4951c8e7b6ca",
+    "fecha": "2026-09-20",
+    "nombre": "R6 domingo cruza medianoche",
+    "hora_fin": "01:00:00",
+    "confirmada": true,
+    "hora_inicio": "23:30:00"
+   },
+   "reserva_id": "cf0c27f2-29e4-4a55-80b2-4951c8e7b6ca",
+   "venta_items": [
+    {
+     "id": "e32c6207-521b-43c8-819d-983bc172a029",
+     "creado": "2026-09-27T03:24:39.550072+00:00",
+     "cantidad": 2,
+     "subtotal": 6000,
+     "productos": {
+      "nombre": "Cerveza"
+     },
+     "producto_id": "618bcc81-168c-4e30-9f82-a19faa77f9c2",
+     "devoluciones": [],
+     "costo_unitario_snapshot": 1500,
+     "precio_unitario_snapshot": 3000
+    }
+   ],
+   "pago_efectivo": 0,
+   "pago_transferencia": 6000
+  },
+  {
+   "id": "c8386dc6-73dc-4568-9ba1-ae5d4a423fd7",
+   "fecha": "2026-09-22",
+   "total": 2500,
+   "creado": "2026-09-22T21:30:00+00:00",
+   "reservas": null,
+   "reserva_id": null,
+   "venta_items": [
+    {
+     "id": "48e344ca-8af9-4b92-9bdd-6ed25168cf1c",
+     "creado": "2026-09-27T03:24:39.553036+00:00",
+     "cantidad": 1,
+     "subtotal": 2500,
+     "productos": {
+      "nombre": "Gatorade"
+     },
+     "producto_id": "02df958e-80bf-48c5-a8f2-a9c3018f0b4b",
+     "devoluciones": [
+      {
+       "cantidad": 1,
+       "medio_reembolso": "transferencia"
+      }
+     ],
+     "costo_unitario_snapshot": 1200,
+     "precio_unitario_snapshot": 2500
+    }
+   ],
+   "pago_efectivo": 2500,
+   "pago_transferencia": 0
+  },
+  {
+   "id": "59c19b18-f38b-4a8f-b56c-aa9c00826228",
+   "fecha": "2026-09-24",
+   "total": 999.99,
+   "creado": "2026-09-24T13:30:00+00:00",
+   "reservas": {
+    "id": "12919c2c-8333-4375-b784-8e2fe14a3a25",
+    "fecha": "2026-09-24",
+    "nombre": "R9 centavos",
+    "hora_fin": "11:00:00",
+    "confirmada": true,
+    "hora_inicio": "10:00:00"
+   },
+   "reserva_id": "12919c2c-8333-4375-b784-8e2fe14a3a25",
+   "venta_items": [
+    {
+     "id": "44e228cd-95b1-40d6-949d-96fada2bb398",
+     "creado": "2026-09-27T03:24:39.555909+00:00",
+     "cantidad": 3,
+     "subtotal": 999.99,
+     "productos": {
+      "nombre": "Barrita"
+     },
+     "producto_id": "bc763358-072a-488e-bd64-67314d837ffa",
+     "devoluciones": [],
+     "costo_unitario_snapshot": 100,
+     "precio_unitario_snapshot": 333.33
+    }
+   ],
+   "pago_efectivo": 999.99,
+   "pago_transferencia": 0
+  }
+ ],
+ "devoluciones": [
+  {
+   "id": "8ed83f72-213f-4985-9f99-e0e76ca5b86f",
+   "fecha": "2026-09-16",
+   "creado": "2026-09-16T13:00:00+00:00",
+   "motivo": "test",
+   "cantidad": 1,
+   "venta_items": {
+    "ventas": {
+     "id": "644901a6-16a2-46b4-9933-9978d9441d0b",
+     "fecha": "2026-09-15",
+     "creado": "2026-09-15T22:10:00+00:00"
+    },
+    "productos": {
+     "nombre": "Agua"
+    },
+    "precio_unitario_snapshot": 1000
+   },
+   "medio_reembolso": "efectivo"
+  },
+  {
+   "id": "ef515882-4d8d-4dd1-b4a8-b04c4d06c863",
+   "fecha": "2026-09-21",
+   "creado": "2026-09-21T03:05:00+00:00",
+   "motivo": "test",
+   "cantidad": 1,
+   "venta_items": {
+    "ventas": {
+     "id": "f40b3c6e-6d9c-4e93-b763-9c8fb3878c26",
+     "fecha": "2026-09-13",
+     "creado": "2026-09-14T00:00:00+00:00"
+    },
+    "productos": {
+     "nombre": "Agua"
+    },
+    "precio_unitario_snapshot": 1000
+   },
+   "medio_reembolso": "transferencia"
+  },
+  {
+   "id": "ed687208-0a53-4f7e-b711-eb9c664f3c22",
+   "fecha": "2026-09-22",
+   "creado": "2026-09-22T14:00:00+00:00",
+   "motivo": "test",
+   "cantidad": 1,
+   "venta_items": {
+    "ventas": {
+     "id": "d2e9eaf7-29ad-498e-b450-15299608472e",
+     "fecha": "2026-09-17",
+     "creado": "2026-09-17T23:30:00+00:00"
+    },
+    "productos": {
+     "nombre": "Agua"
+    },
+    "precio_unitario_snapshot": 1000
+   },
+   "medio_reembolso": "efectivo"
+  },
+  {
+   "id": "0b044588-573e-4824-a111-46d00b19207d",
+   "fecha": "2026-09-23",
+   "creado": "2026-09-23T15:00:00+00:00",
+   "motivo": "test",
+   "cantidad": 1,
+   "venta_items": {
+    "ventas": {
+     "id": "c8386dc6-73dc-4568-9ba1-ae5d4a423fd7",
+     "fecha": "2026-09-22",
+     "creado": "2026-09-22T21:30:00+00:00"
+    },
+    "productos": {
+     "nombre": "Gatorade"
+    },
+    "precio_unitario_snapshot": 2500
+   },
+   "medio_reembolso": "transferencia"
+  },
+  {
+   "id": "fc389fe6-cc1e-40f2-ab34-359a0db1e124",
+   "fecha": "2026-09-24",
+   "creado": "2026-09-24T12:00:00+00:00",
+   "motivo": "test",
+   "cantidad": 1,
+   "venta_items": {
+    "ventas": {
+     "id": "644901a6-16a2-46b4-9933-9978d9441d0b",
+     "fecha": "2026-09-15",
+     "creado": "2026-09-15T22:10:00+00:00"
+    },
+    "productos": {
+     "nombre": "Agua"
+    },
+    "precio_unitario_snapshot": 1000
+   },
+   "medio_reembolso": "efectivo"
+  }
+ ],
+ "reservas": [
+  {
+   "id": "9b441e54-627b-4973-a3e4-fe842c80f3e1",
+   "fecha": "2026-09-02",
+   "creado": "2026-09-27T03:24:39.429706+00:00",
+   "nombre": "TF Miércoles",
+   "precio": 10000,
+   "ventas": [
+    {
+     "count": 0
+    }
+   ],
+   "hora_fin": "23:00:00",
+   "telefono": "1155559999",
+   "bloqueado": false,
+   "confirmada": true,
+   "hora_inicio": "22:00:00",
+   "pago_efectivo": 0,
+   "turno_fijo_id": "5fa32e57-4090-4668-9359-b8695238e376",
+   "pago_transferencia": 0,
+   "telefono_normalizado": "1155559999",
+   "hora_apertura_vigente": "08:00:00"
+  },
+  {
+   "id": "bc6cc852-b38a-45aa-b7c4-a5eaadd692dc",
+   "fecha": "2026-09-09",
+   "creado": "2026-09-27T03:24:39.429706+00:00",
+   "nombre": "TF Miércoles",
+   "precio": 10000,
+   "ventas": [
+    {
+     "count": 0
+    }
+   ],
+   "hora_fin": "23:00:00",
+   "telefono": "1155559999",
+   "bloqueado": false,
+   "confirmada": true,
+   "hora_inicio": "22:00:00",
+   "pago_efectivo": 0,
+   "turno_fijo_id": "5fa32e57-4090-4668-9359-b8695238e376",
+   "pago_transferencia": 0,
+   "telefono_normalizado": "1155559999",
+   "hora_apertura_vigente": "08:00:00"
+  },
+  {
+   "id": "04f134d8-f493-49fe-8fb4-087b52502ea1",
+   "fecha": "2026-09-15",
+   "creado": "2026-09-27T03:24:39.382638+00:00",
+   "nombre": "R1 efectivo",
+   "precio": 10000,
+   "ventas": [
+    {
+     "count": 0
+    }
+   ],
+   "hora_fin": "19:00:00",
+   "telefono": "1155551234",
+   "bloqueado": false,
+   "confirmada": true,
+   "hora_inicio": "18:00:00",
+   "pago_efectivo": 10000,
+   "turno_fijo_id": null,
+   "pago_transferencia": 0,
+   "telefono_normalizado": "1155551234",
+   "hora_apertura_vigente": "08:00:00"
+  },
+  {
+   "id": "ac8a8cec-e707-47b4-8fe0-5a35c5340886",
+   "fecha": "2026-09-16",
+   "creado": "2026-09-27T03:24:39.407874+00:00",
+   "nombre": "R2 transferencia",
+   "precio": 15000,
+   "ventas": [
+    {
+     "count": 0
+    }
+   ],
+   "hora_fin": "20:30:00",
+   "telefono": "1155551234",
+   "bloqueado": false,
+   "confirmada": true,
+   "hora_inicio": "19:00:00",
+   "pago_efectivo": 0,
+   "turno_fijo_id": null,
+   "pago_transferencia": 15000,
+   "telefono_normalizado": "1155551234",
+   "hora_apertura_vigente": "08:00:00"
+  },
+  {
+   "id": "e390d5e7-96a0-4a51-8069-2fdc01154738",
+   "fecha": "2026-09-16",
+   "creado": "2026-09-27T03:24:39.429706+00:00",
+   "nombre": "TF Miércoles",
+   "precio": 10000,
+   "ventas": [
+    {
+     "count": 0
+    }
+   ],
+   "hora_fin": "23:00:00",
+   "telefono": "1155559999",
+   "bloqueado": false,
+   "confirmada": true,
+   "hora_inicio": "22:00:00",
+   "pago_efectivo": 10000,
+   "turno_fijo_id": "5fa32e57-4090-4668-9359-b8695238e376",
+   "pago_transferencia": 0,
+   "telefono_normalizado": "1155559999",
+   "hora_apertura_vigente": "08:00:00"
+  },
+  {
+   "id": "ddac91d4-e8ef-4260-b95a-14639f05228a",
+   "fecha": "2026-09-17",
+   "creado": "2026-09-27T03:24:39.409765+00:00",
+   "nombre": "R3 mixto",
+   "precio": 10000,
+   "ventas": [
+    {
+     "count": 1
+    }
+   ],
+   "hora_fin": "21:00:00",
+   "telefono": "1155551234",
+   "bloqueado": false,
+   "confirmada": true,
+   "hora_inicio": "20:00:00",
+   "pago_efectivo": 4000,
+   "turno_fijo_id": null,
+   "pago_transferencia": 6000,
+   "telefono_normalizado": "1155551234",
+   "hora_apertura_vigente": "08:00:00"
+  },
+  {
+   "id": "9144fea2-ba9f-426b-82b8-40808705fbfa",
+   "fecha": "2026-09-18",
+   "creado": "2026-09-27T03:24:39.411068+00:00",
+   "nombre": "R4 parcial + saldo otra semana",
+   "precio": 10000,
+   "ventas": [
+    {
+     "count": 0
+    }
+   ],
+   "hora_fin": "22:00:00",
+   "telefono": "1155551234",
+   "bloqueado": false,
+   "confirmada": true,
+   "hora_inicio": "21:00:00",
+   "pago_efectivo": 5000,
+   "turno_fijo_id": null,
+   "pago_transferencia": 2000,
+   "telefono_normalizado": "1155551234",
+   "hora_apertura_vigente": "08:00:00"
+  },
+  {
+   "id": "4ffe7fc0-68e2-4d26-8ada-a31c8aa9f497",
+   "fecha": "2026-09-19",
+   "creado": "2026-09-27T03:24:39.412296+00:00",
+   "nombre": "R5 sin pago",
+   "precio": 10000,
+   "ventas": [
+    {
+     "count": 0
+    }
+   ],
+   "hora_fin": "18:00:00",
+   "telefono": "1155551234",
+   "bloqueado": false,
+   "confirmada": true,
+   "hora_inicio": "17:00:00",
+   "pago_efectivo": 0,
+   "turno_fijo_id": null,
+   "pago_transferencia": 0,
+   "telefono_normalizado": "1155551234",
+   "hora_apertura_vigente": "08:00:00"
+  },
+  {
+   "id": "cf0c27f2-29e4-4a55-80b2-4951c8e7b6ca",
+   "fecha": "2026-09-20",
+   "creado": "2026-09-27T03:24:39.413982+00:00",
+   "nombre": "R6 domingo cruza medianoche",
+   "precio": 15000,
+   "ventas": [
+    {
+     "count": 1
+    }
+   ],
+   "hora_fin": "01:00:00",
+   "telefono": "1155551234",
+   "bloqueado": false,
+   "confirmada": true,
+   "hora_inicio": "23:30:00",
+   "pago_efectivo": 0,
+   "turno_fijo_id": null,
+   "pago_transferencia": 15000,
+   "telefono_normalizado": "1155551234",
+   "hora_apertura_vigente": "08:00:00"
+  },
+  {
+   "id": "e928f958-cf9c-4bb5-b42c-cf5e3fc13049",
+   "fecha": "2026-09-22",
+   "creado": "2026-09-27T03:24:39.415287+00:00",
+   "nombre": "R7 cobro en paralelo misma clave",
+   "precio": 10000,
+   "ventas": [
+    {
+     "count": 0
+    }
+   ],
+   "hora_fin": "19:00:00",
+   "telefono": "1155551234",
+   "bloqueado": false,
+   "confirmada": true,
+   "hora_inicio": "18:00:00",
+   "pago_efectivo": 10000,
+   "turno_fijo_id": null,
+   "pago_transferencia": 0,
+   "telefono_normalizado": "1155551234",
+   "hora_apertura_vigente": "08:00:00"
+  },
+  {
+   "id": "c7290889-93b8-43b2-8f90-be16fe069f70",
+   "fecha": "2026-09-23",
+   "creado": "2026-09-27T03:24:39.419015+00:00",
+   "nombre": "R10 corrección de medio",
+   "precio": 10000,
+   "ventas": [
+    {
+     "count": 0
+    }
+   ],
+   "hora_fin": "11:00:00",
+   "telefono": "1155551234",
+   "bloqueado": false,
+   "confirmada": true,
+   "hora_inicio": "10:00:00",
+   "pago_efectivo": 0,
+   "turno_fijo_id": null,
+   "pago_transferencia": 10000,
+   "telefono_normalizado": "1155551234",
+   "hora_apertura_vigente": "08:00:00"
+  },
+  {
+   "id": "f5a84b9a-8d55-472e-b68b-85e569faef01",
+   "fecha": "2026-09-23",
+   "creado": "2026-09-27T03:24:39.429706+00:00",
+   "nombre": "TF Miércoles",
+   "precio": 10000,
+   "ventas": [
+    {
+     "count": 0
+    }
+   ],
+   "hora_fin": "23:00:00",
+   "telefono": "1155559999",
+   "bloqueado": false,
+   "confirmada": true,
+   "hora_inicio": "22:00:00",
+   "pago_efectivo": 0,
+   "turno_fijo_id": "5fa32e57-4090-4668-9359-b8695238e376",
+   "pago_transferencia": 10000,
+   "telefono_normalizado": "1155559999",
+   "hora_apertura_vigente": "08:00:00"
+  },
+  {
+   "id": "12919c2c-8333-4375-b784-8e2fe14a3a25",
+   "fecha": "2026-09-24",
+   "creado": "2026-09-27T03:24:39.417393+00:00",
+   "nombre": "R9 centavos",
+   "precio": 12345.67,
+   "ventas": [
+    {
+     "count": 1
+    }
+   ],
+   "hora_fin": "11:00:00",
+   "telefono": "1155551234",
+   "bloqueado": false,
+   "confirmada": true,
+   "hora_inicio": "10:00:00",
+   "pago_efectivo": 6172.83,
+   "turno_fijo_id": null,
+   "pago_transferencia": 6172.84,
+   "telefono_normalizado": "1155551234",
+   "hora_apertura_vigente": "08:00:00"
+  },
+  {
+   "id": "443fee4a-4ba6-4566-9aec-9a7f6b926ed2",
+   "fecha": "2026-09-26",
+   "creado": "2026-09-27T03:24:39.416335+00:00",
+   "nombre": "R8 seña turno futuro",
+   "precio": 10000,
+   "ventas": [
+    {
+     "count": 0
+    }
+   ],
+   "hora_fin": "23:00:00",
+   "telefono": "1155551234",
+   "bloqueado": false,
+   "confirmada": true,
+   "hora_inicio": "22:00:00",
+   "pago_efectivo": 0,
+   "turno_fijo_id": null,
+   "pago_transferencia": 3000,
+   "telefono_normalizado": "1155551234",
+   "hora_apertura_vigente": "08:00:00"
+  }
+ ]
+}

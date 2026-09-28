@@ -1,0 +1,5 @@
+/* Lock only while the new fixed-slot modal is mounted; nested pickers and
+   confirmations retain their own scroll handling. */
+body:has(.tf-alta-overlay) {
+  overflow: hidden;
+}

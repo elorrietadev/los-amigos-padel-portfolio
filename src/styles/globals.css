@@ -1,0 +1,775 @@
+@import "tailwindcss";
+@import "./tokens.css";
+@import "./public-tokens.css";
+@import "./controls.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* R9.1 — cursor:pointer en TODO lo realmente clickeable. Los navegadores no
+   ponen "pointer" en <button> por defecto (a diferencia de los <a> con href),
+   así que sin esto casi todos los botones del admin mostraban flecha. Un solo
+   selector global en vez de repetir `cursor-pointer` a mano en cada primitivo
+   (Button/IconButton/filas/tabs/etc.) — más fácil de mantener y no depende de
+   que cada componente nuevo se acuerde de agregarlo. [role="button"] cubre
+   los pocos casos de un <div>/<span> interactivo (ninguno disabled hoy, pero
+   el segundo selector lo deja resuelto si aparece uno). Los <button
+   disabled="disabled"> ya muestran cursor:not-allowed vía las utilities
+   disabled: de cada primitivo — esta regla no los pisa porque `:not(:disabled)`
+   los excluye explícitamente. */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
+}
+
+/* Debajo del encabezado mobile; fuera de la zona de navegación inferior. */
+.admin-toast {
+  top: calc(80px + env(safe-area-inset-top));
+}
+@media (min-width: 1024px) {
+  .admin-toast {
+    top: auto;
+    bottom: 20px;
+  }
+}
+
+/* color-scheme ahora lo decide :root/:root[data-theme] en tokens.css (según
+   el tema activo) — se saca de acá para no pisarlo con un valor fijo. */
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  /* R1 — transición de tema (sección 7): solo el fondo/texto de la página,
+     nunca `transition: all`. Los controles interactivos nuevos (Button,
+     IconButton, Input, Select) tienen su propia transición equivalente vía
+     .ui-transition, más abajo — las pantallas legacy no se tocan en R1 y no
+     tienen esta transición todavía (no hay botón visible para cambiar de
+     tema hasta R2, así que no hay manera de notar la diferencia todavía). */
+  transition:
+    background-color var(--duration-base) var(--ease-out),
+    color var(--duration-base) var(--ease-out);
+}
+
+/* R1 — transición compartida por los primitivos nuevos (Button, IconButton,
+   Input, Select): SOLO color/fondo/borde/sombra, nunca transform (el press
+   feedback usa las utilities active:/motion-reduce:active: de Tailwind,
+   independientes de esta clase) y nunca `transition: all`. Vive fuera de
+   cualquier utility de Tailwind (no en @layer utilities) a propósito: así no
+   depende del orden de las cascade layers de Tailwind v4 frente a CSS sin
+   capa — ver el bloque de reduced-motion más abajo, que la neutraliza acá
+   mismo en vez de confiar en la variante motion-reduce: de Tailwind. */
+.ui-transition {
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+
+/* R2 — colapso de ancho de la Sidebar. Separada de .ui-transition (que nunca
+   anima layout) por la misma razón que esa ya documenta: una sola propiedad
+   por clase, nada de `transition: all`. */
+.ui-transition-width {
+  transition: width 200ms var(--ease-out);
+}
+
+/* The slot changes only on pin/unpin, once. The sidebar can animate inside
+   it (and preview over the page) without resizing Agenda every frame. */
+.admin-sidebar-slot { position: relative; z-index: 30; }
+.admin-sidebar nav { justify-content: space-evenly; gap: 12px; }
+.admin-sidebar nav > div { gap: 3px; }
+@media (min-height: 800px) {
+  .admin-sidebar nav > div { gap: 6px; }
+  .admin-sidebar nav .sidebar-row { min-height: 36px; }
+}
+@media (max-height: 680px) {
+  .admin-sidebar nav { justify-content: flex-start; gap: 4px; }
+  .admin-sidebar nav > div { gap: 2px; }
+}
+.reserva-detail-body { scrollbar-gutter: stable; padding-right: 10px; }
+.reserva-facts > div { flex-direction: column; align-items: flex-start; gap: 3px; padding-block: 7px; }
+.reserva-facts > div > span:last-child { text-align: left; }
+.reserva-facts > div:last-child:nth-child(odd) { grid-column: 1 / -1; }
+
+/* Equal-width segments move only when the selected value changes. Loading
+   content above the control cannot trigger a shared-layout interpolation. */
+.segmented-indicator {
+  transition: transform 200ms var(--ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .segmented-indicator { transition: none; }
+}
+
+.admin-sidebar .sidebar-row {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 10px;
+  min-width: 0;
+  text-align: left;
+}
+.admin-sidebar .sidebar-row > svg,
+.admin-sidebar .sidebar-row > span.rounded-full {
+  justify-self: center;
+}
+.admin-sidebar .sidebar-label {
+  white-space: nowrap;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+.admin-sidebar[data-expanded="false"] .sidebar-label {
+  opacity: 0;
+  pointer-events: none;
+}
+.admin-sidebar .sidebar-toggle {
+  transition:
+    transform 200ms var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+/* El toggle usa el espacio del primer título (oculto al colapsar), sin
+   convertir el encabezado de fila a columna ni desplazar la navegación. */
+.admin-sidebar[data-expanded="false"] .sidebar-toggle {
+  transform: translate(-185px, 0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .admin-sidebar .sidebar-toggle {
+    transition-property: background-color, color;
+  }
+}
+
+/* Efecto "vidrio esmerilado" de las cards (sty.card/sty.cardGlass, index.html:761-776)
+   — restaura el backdrop-filter: blur(14px) que tenía el 100% de las cards legacy
+   y que se había perdido en el port (--blur-glass ya existía en tokens.css pero
+   no estaba cableado a ninguna clase). Centralizado acá en vez de repetir
+   backdrop-blur-[var(--blur-glass)] + su prefijo -webkit- en cada card: este
+   proyecto no tiene autoprefixer/postcss (Tailwind v4 vía @tailwindcss/vite,
+   sin pipeline de PostCSS propio), así que Tailwind no agrega el prefijo por su
+   cuenta y hay que escribirlo a mano — una sola vez, acá. */
+.glass-blur {
+  -webkit-backdrop-filter: blur(var(--blur-glass));
+  backdrop-filter: blur(var(--blur-glass));
+}
+
+/* --- reservations-public/components: animaciones de esta tanda --- */
+/* Curva unificada a --ease-out (ya existente) en vez del cubic-bezier(0.23,1,0.32,1)
+   propio de index.html — MEJORA APROBADA, diferencia imperceptible, evita mantener
+   dos curvas casi idénticas sin nombre compartido. */
+
+.tap-fx {
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.tap-fx:active {
+  transform: scale(0.96);
+  opacity: 0.9;
+}
+
+/* ProductoCard (VenderView, R6): flash corto al agregar al carrito — pura
+   CSS (no Motion, a propósito: el pedido acota Motion a la cápsula de pago y
+   al carrito/layout). Se apaga solo vía onAnimationEnd en el componente, sin
+   setTimeout: el texto/nombre accesible del botón nunca cambia mientras dura. */
+@keyframes add-flash {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.04);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.add-flash {
+  animation: add-flash 320ms var(--ease-out);
+}
+
+.state-fx {
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.2s var(--ease-out),
+    color 0.18s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.anim-fadein {
+  animation: fadeIn 0.4s var(--ease-out) backwards;
+}
+
+@keyframes accentShine {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+.accent-shine {
+  animation: accentShine 1.1s var(--ease-out) 1 both;
+}
+
+/* GlowBackground: respiración muy sutil — MEJORA APROBADA. No debe notarse
+   conscientemente (variación mínima de escala/opacidad, ciclo largo). */
+@keyframes glow-respirar {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+.glow-respirar {
+  animation: glow-respirar 9s var(--ease-out) infinite;
+}
+
+/* LoadingSkeleton: shimmer deslizante — MEJORA APROBADA reemplazando el pulso
+   plano de opacidad del legacy (.skeleton/shimmerPulse). #182620 es el mismo
+   gris-verde que usaba sty.chip/sty.skeleton en el legacy — NO tokenizado
+   todavía: en esta tanda solo lo usa el skeleton; se va a repetir con los chips
+   reales (DateChipsSelector/TimeSlotGrid, tandas futuras) y ahí sí va a
+   convenir nombrarlo. */
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+.skeleton-shimmer {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-surface-2) 25%,
+    var(--color-surface-hover) 50%,
+    var(--color-surface-2) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+}
+
+/* SuccessScreen: check "dibujado" + pop — MEJORA APROBADA reemplazando el pop
+   simple del legacy (.anim-success-icon/successPop). */
+@keyframes exito-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.anim-exito-pop {
+  animation: exito-pop 0.5s var(--ease-out) both;
+}
+@keyframes exito-check-dibujo {
+  from {
+    stroke-dashoffset: 24;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.anim-exito-check {
+  stroke-dasharray: 24;
+  stroke-dashoffset: 24;
+  animation: exito-check-dibujo 0.4s var(--ease-out) 0.15s both;
+}
+
+/* Precio estimado (ReservationForm): feedback rápido al cambiar de valor —
+   index.html:70-79 (priceModernBlur/.anim-price), valores portados tal cual.
+   Curva unificada a --ease-out por el mismo motivo documentado arriba. */
+@keyframes priceModernBlur {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+    color: #f6ffc9;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    color: #d7f26d;
+  }
+}
+.anim-price {
+  display: inline-block;
+  animation: priceModernBlur 0.22s var(--ease-out);
+}
+
+/* Spinner del botón "Guardando..." — index.html:67-68, valores portados tal
+   cual (incluyendo el linear, que ya era así en el legacy). */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.spinner {
+  width: 15px;
+  height: 15px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+}
+
+/* Aparición del bloque de hora fin (TimeSlotGrid) al elegir hora inicio —
+   index.html:27-31 (slideDownFade/.anim-slidedown), valores portados tal cual.
+   Curva unificada a --ease-out por el mismo motivo documentado arriba. */
+@keyframes slideDownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.anim-slidedown {
+  animation: slideDownFade 0.35s var(--ease-out);
+}
+
+/* DateChipsSelector: scroll horizontal de chips sin scrollbar visible —
+   index.html:19 (.dias-scroll::-webkit-scrollbar) + sty.diasScroll.scrollbarWidth
+   (Firefox, inline en el legacy). Acá se consolida en una sola regla CSS real
+   porque ya tenemos hoja de estilos propia. El scroll (overflow-x-auto) sigue
+   intacto, solo se oculta la barra. */
+.dias-scroll {
+  scrollbar-width: none;
+}
+.dias-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* AgendaGridDesktop/AgendaDiaMobile (R3.1): mismo truco que .dias-scroll de
+   arriba, para el contenedor con scroll vertical de la grilla — el scroll en
+   sí (overflow-auto) sigue intacto, wheel/trackpad/teclado siguen andando,
+   solo se oculta la barra visual. No afecta ningún indicador de accesibilidad:
+   la barra de scroll del SO no es el mecanismo por el que un lector de
+   pantalla expone que una región es desplazable. */
+.agenda-scroll {
+  scrollbar-width: none;
+}
+.agenda-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* R9.1 — mismo truco que .dias-scroll/.agenda-scroll de arriba, con nombre
+   genérico para reusar en cualquier lista con scroll propio que no deba
+   mostrar la barra (lista de reservas atables de VenderView, por ahora). El
+   scroll en sí sigue intacto — solo se oculta el indicador visual. */
+.scroll-hidden {
+  scrollbar-width: none;
+}
+.scroll-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+/* Indicador "cancha abierta ahora" (hero de PublicBookingPage) — index.html:40-52
+   (.live-dot/liveDotPing), valores portados tal cual. Curva unificada a
+   --ease-out por el mismo motivo documentado arriba. */
+.live-dot {
+  position: relative;
+}
+.live-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: inherit;
+  animation: liveDotPing 2s var(--ease-out) infinite;
+}
+@keyframes liveDotPing {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+/* Hover sutil para mouse/trackpad — MEJORA NUEVA, no existía en el legacy.
+   Gateado explícitamente a @media (hover: hover) and (pointer: fine) para no
+   generar estados "pegados" en touch (un dispositivo touch nunca cumple esta
+   media query, así que estas reglas ni se evalúan ahí). El feedback táctil
+   existente (.tap-fx/.state-fx, basado en :active) no se toca — son mecanismos
+   independientes, sin conflicto real entre ellos.
+   En botones deshabilitados (disabled) no llega a dispararse: los navegadores
+   no despachan eventos de puntero a controles de formulario disabled, así que
+   :hover nunca matchea ahí sin necesidad de ninguna condición extra. */
+@media (hover: hover) and (pointer: fine) {
+  .hover-lift:hover {
+    transform: translateY(-1px);
+  }
+  .hover-border-accent:hover {
+    border-color: var(--color-accent);
+  }
+  .hover-border-success:hover {
+    border-color: var(--color-success);
+  }
+  .hover-glow-accent:hover {
+    box-shadow: 0 0 22px rgba(215, 242, 109, 0.4);
+  }
+  .hover-glow-instagram:hover {
+    /* Mismo valor que ya existía como utility de Tailwind (hover:shadow-[...])
+       en InstagramCard — se migra acá por consistencia con el resto de esta
+       tanda, mismo efecto visual, sin cambios de color/intensidad. */
+    box-shadow: 0 0 18px rgba(221, 42, 123, 0.45);
+  }
+}
+
+/* Overlay de baja (modal de confirmación y modal de aviso) — baja.html:56-64,
+   valores portados tal cual (incluido el detalle real del legacy: el reverse
+   de cierre del overlay es 130ms y el del modal 140ms, duraciones distintas
+   entre sí, no un error de tipeo). Se usan --ease-out y z-50 porque ya
+   coinciden con los valores del legacy (--ease-out mismo valor exacto; z-index
+   50 == Tailwind z-50); el resto (backdrop rgba(5,10,7,0.7), blur 3px, radius
+   16px, --duration-base 250ms de tokens.css) NO coincide con los valores
+   reales de baja.html y se mantiene literal en vez de forzarlo a un token
+   existente que cambiaría la animación. */
+@keyframes overlayIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.overlay-anim {
+  animation: overlayIn 180ms ease-out;
+}
+.overlay-anim[data-closing="true"] {
+  animation: overlayIn 130ms ease-out reverse;
+}
+
+@keyframes modalPop {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.modal-pop {
+  animation: modalPop 220ms var(--ease-out);
+  transform-origin: center;
+}
+.modal-pop[data-closing="true"] {
+  animation: modalPop 140ms ease-out reverse;
+}
+
+/* Entrada escalonada de cada ocurrencia en BajaPage — baja.html:44,215,
+   valores portados tal cual. NO es lo mismo que .anim-exito-pop/skeleton-shimmer
+   (mejoras aprobadas para reservations-public/index): baja.html tiene su propia
+   versión legacy de esta animación, separada a propósito para no heredar
+   mejoras de otra feature sin pedirlas para esta. */
+@keyframes cardPop {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.card-pop {
+  animation: cardPop 280ms var(--ease-out) backwards;
+}
+
+/* Pop del ícono de éxito de baja.html:53,283 — versión "simple" del legacy de
+   baja, distinta de .anim-exito-pop/.anim-exito-check (SuccessScreen), que es
+   una mejora ya aprobada para otro SVG con trazo dibujado. */
+@keyframes checkPop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.check-pop {
+  animation: checkPop 380ms var(--ease-out);
+}
+
+/* Skeleton de carga de baja.html:48,187-189 — pulso plano de opacidad, tal
+   cual el legacy (distinto del shimmer deslizante .skeleton-shimmer que ya es
+   una mejora aprobada para el index; acá se mantiene la versión simple porque
+   no se pidió la mejora para esta feature). #182620 coincide con el mismo
+   gris-verde de sty.skeleton en el index legacy, pura coincidencia de valores
+   entre ambas páginas. */
+@keyframes shimmerPulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.skeleton {
+  background: var(--color-surface-2);
+  border-radius: 10px;
+  animation: shimmerPulse 1.3s ease-in-out infinite;
+}
+
+/* AdminLogin: shake corto del bloque de error — MEJORA NUEVA, no existe legacy
+   equivalente (admin.html solo mostraba el texto de error sin animación). Se
+   dispara solo, sin necesidad de key/contador: el bloque se desmonta cuando
+   errorLogin vuelve a null (limpiado al reintentar) y se monta de cero en cada
+   intento fallido, así que un simple mount re-dispara la animación cada vez. */
+@keyframes shake {
+  10%,
+  90% {
+    transform: translateX(-1px);
+  }
+  20%,
+  80% {
+    transform: translateX(2px);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translateX(-4px);
+  }
+  40%,
+  60% {
+    transform: translateX(4px);
+  }
+}
+.anim-shake {
+  animation: shake 0.4s var(--ease-out);
+}
+
+/* AdminShell: bottom-nav (mobile) <-> sidebar (desktop) — mismo mecanismo que
+   el legacy (admin.html:104-120): pivotea por "¿tiene mouse?" (hover:hover +
+   pointer:fine), no por ancho de pantalla, así un tablet táctil grande sigue
+   viendo la barra inferior y una notebook angosta ya ve el sidebar. Solo
+   layout/posicionamiento acá — el fondo "vidrio esmerilado" se agrega en el
+   JSX combinando esta clase con .glass-blur/bg-surface-glass. */
+.admin-shell-content {
+  padding-bottom: calc(88px + env(safe-area-inset-bottom));
+}
+.admin-shell-page {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 20px 16px 0;
+}
+.admin-nav {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 40;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 6px calc(10px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--color-border);
+}
+.admin-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 4px 10px;
+  font-size: 10.5px;
+  font-weight: 600;
+}
+@media (hover: hover) and (pointer: fine) {
+  .admin-shell-content {
+    padding-bottom: 0;
+    padding-left: 96px;
+  }
+  .admin-shell-page {
+    max-width: 1100px;
+    padding: 32px 32px 0;
+  }
+  .admin-nav {
+    top: 0;
+    right: auto;
+    width: 96px;
+    height: 100vh;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 22px;
+    padding: 32px 8px;
+    border-top: none;
+    border-right: 1px solid var(--color-border);
+  }
+  .admin-nav-item {
+    width: 100%;
+    padding: 12px 8px;
+    border-radius: 14px;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      transform 0.2s var(--ease-out);
+  }
+  .admin-nav-item:hover {
+    background: rgba(215, 242, 109, 0.08);
+    color: var(--color-accent);
+    transform: translateY(-2px);
+  }
+}
+
+/* Reduced motion — acotado SOLO a las animaciones que usa esta tanda, no una
+   regla global que desactive transiciones futuras del sistema sin distinción.
+   El legacy (index.html) no tenía ningún soporte de reduced motion (grep
+   confirmado, cero coincidencias de @media (prefers-reduced-motion: reduce)
+   en todo el archivo) — esto explica por qué el comportamiento viejo nunca
+   distinguió nada acá, pero la nueva arquitectura SÍ lo incorpora
+   deliberadamente como mejora de accesibilidad, decidida independientemente
+   de esa carencia del legacy. .anim-price, .spinner y .anim-slidedown se
+   desactivan acá porque las tres implican movimiento no esencial para
+   entender el contenido (el precio final, el estado de guardando y el bloque
+   de hora fin siguen siendo perfectamente legibles sin la animación). */
+@media (prefers-reduced-motion: reduce) {
+  .anim-fadein {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .accent-shine {
+    animation: none;
+    background-position: 100% 50%;
+  }
+  .glow-respirar {
+    animation: none;
+  }
+  .skeleton-shimmer {
+    animation: none;
+    background-image: none;
+    background-color: var(--color-surface-2);
+  }
+  .anim-exito-pop {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .anim-exito-check {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .anim-price {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    color: #d7f26d;
+  }
+  .spinner {
+    /* Sigue visible como círculo estático — NO se oculta y el texto
+       "Guardando..." sigue comunicando el estado, solo se apaga el giro. */
+    animation: none;
+  }
+  .anim-slidedown {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .anim-shake {
+    animation: none;
+    transform: none;
+  }
+  .add-flash {
+    animation: none;
+  }
+  .admin-nav-item {
+    transition-duration: 0.001ms !important;
+  }
+  .admin-nav-item:hover {
+    transform: none !important;
+  }
+  /* R1 — mismo criterio que el resto de este bloque: la transición de tema y
+     la de los primitivos nuevos son movimiento no esencial (el resultado
+     final es igual de legible sin el crossfade). */
+  body,
+  .ui-transition,
+  .ui-transition-width {
+    transition: none;
+  }
+  .live-dot::after {
+    /* El ping es puramente decorativo (repetición infinita) — se oculta del
+       todo en vez de dejarlo congelado a mitad de animación. El punto de
+       estado (abierta/cerrada) en sí no depende de esto para comunicarse. */
+    animation: none;
+    opacity: 0;
+  }
+
+  /* .overlay-anim/.modal-pop SÍ tenían reduced motion en el legacy
+     (baja.html:66-71: `.anim-fadein, .card-pop, .check-pop, .overlay-anim,
+     .modal-pop { animation-duration: 0.001ms !important; }`) — a diferencia
+     de index.html, que no tenía nada. Esto es paridad, no una mejora nueva.
+     Se porta con el mismo patrón ya usado arriba para el resto de las clases
+     de esta tanda (animation: none + estado final explícito) en vez del hack
+     de 0.001ms, porque el resultado visual final es idéntico. */
+  .overlay-anim {
+    animation: none;
+    opacity: 1;
+  }
+  .modal-pop {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Calendar cards keep their time coordinates on hover and keyboard focus. */
+.agenda-event {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, currentColor 9%, transparent), 0 1px 3px rgb(0 0 0 / 10%);
+}
+@media (hover: hover) and (pointer: fine) {
+  .agenda-event:hover:not(:focus-visible) {
+    z-index: 10;
+    outline: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+    outline-offset: -1px;
+    filter: brightness(1.06);
+  }
+}
+
+/* Hide group headings without retaining blank rows in the compact rail. */
+.admin-sidebar[data-expanded="false"] .sidebar-group-label { display: none; }
+.admin-sidebar[data-expanded="false"] > div:first-child > span:first-child { visibility: hidden; }
+@media (min-width: 1200px) and (min-height: 600px) {
+  .admin-workspace-shell { height: 100dvh; overflow: hidden; }
+  .admin-workspace-shell main { display: flex; flex-direction: column; min-height: 0; }
+  .admin-workspace-shell main > :first-child { flex-shrink: 0; }
+  .admin-workspace-shell main > div:not([hidden]):has(> .admin-workspace) { flex: 1; min-height: 0; }
+  .admin-workspace { height: 100%; min-height: 0; gap: 12px; }
+  .admin-workspace > :not(.admin-workspace-columns) { flex-shrink: 0; }
+  .admin-workspace-columns { flex: 1; min-height: 0; }
+}
+@media (min-width: 1200px) and (max-height: 599px) {
+  .admin-workspace-columns { min-height: 400px; }
+  .admin-reserva-detail { max-height: 500px; }
+}

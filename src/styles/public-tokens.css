@@ -1,0 +1,168 @@
+/*
+ * Tokens de identidad PÚBLICA — PUBLIC-R1 (fundaciones del rediseño público,
+ * artifact aprobado). Espacio de nombres propio (--color-pub-*, --radius-pub-*,
+ * --shadow-pub-*, --font-pub-*) para que el jugador y el admin puedan
+ * evolucionar visualmente por separado sin acoplarse, aunque hoy compartan
+ * la misma base Court Graphite y el mismo mecanismo de tema (atributo
+ * data-theme en <html>, ver lib/theme.tsx) — ese mecanismo sí es fundamento
+ * compartido a propósito, los VALORES no.
+ *
+ * Todavía no hay ningún componente público real consumiendo estos tokens
+ * (PublicBookingPage/BajaPage siguen con los tokens compartidos de
+ * tokens.css, sin tocar) — eso es de las próximas etapas (PUBLIC-R2+).
+ */
+@theme {
+  /* ---------- Fondos ---------- */
+  --color-pub-bg: #0a0e0c;
+  --color-pub-bg-subtle: #0d120f;
+  --color-pub-surface: #141b17;
+  --color-pub-surface-2: #1b2420;
+  --color-pub-surface-hover: #1f2a24;
+
+  /* ---------- Texto ---------- */
+  --color-pub-text: #f3faf5;
+  --color-pub-text-secondary: #c3d2c9;
+  --color-pub-muted: #9fb3a8;
+  --color-pub-on-accent: #0a0e0c;
+
+  /* ---------- Bordes ---------- */
+  --color-pub-border: #263229;
+  --color-pub-border-strong: #34453a;
+
+  /* ---------- Marca pública ---------- */
+  --color-pub-accent: #c7f24e;
+  --color-pub-accent-hover: #b3db3c;
+  --color-pub-accent-muted: rgba(199, 242, 78, 0.14);
+  --color-pub-secondary: #5fc9d6;
+  --color-pub-secondary-muted: rgba(95, 201, 214, 0.14);
+  /* "Terra" — tercer color, exclusivo del público (aprobado en el artifact):
+     calidez deportiva que separa la identidad del jugador del cian frío que
+     el admin ya usa para turnos fijos/acentos secundarios. */
+  --color-pub-terra: #f2935b;
+  --color-pub-terra-muted: rgba(242, 147, 91, 0.16);
+
+  /* ---------- Semánticos ---------- */
+  --color-pub-success: #57be8c;
+  --color-pub-warning: #f2b86d;
+  --color-pub-danger: #f2726b;
+
+  /* ---------- Interacción ---------- */
+  --color-pub-focus-ring: var(--color-pub-accent);
+
+  /* ---------- Tipografía ---------- */
+  --font-pub-heading: "Oswald", sans-serif;
+  --font-pub-body: "Inter", sans-serif;
+
+  /* ---------- Radios ---------- */
+  --radius-pub-sm: 8px;
+  --radius-pub-md: 12px;
+  --radius-pub-lg: 20px;
+  --radius-pub-pill: 999px;
+
+  /* ---------- Sombras ---------- */
+  --shadow-pub-sm: 0 10px 24px rgba(0, 0, 0, 0.28);
+  --shadow-pub-md: 0 16px 40px rgba(0, 0, 0, 0.32);
+}
+
+/*
+ * Tema LIGHT público — "sage premium" (aprobado en el artifact): NO es un
+ * blanco plano. Fondo con tinte verde grisáceo, superficies cálidas,
+ * sombras más presentes que en dark (que se apoya en bordes/glow en vez de
+ * sombra) y el acento lime bajado de intensidad para mantener contraste de
+ * texto sin perder calidez. Mismos ajustes de contraste que ya se validaron
+ * para el light de admin (texto blanco/oscuro sobre el acento >= 4.5:1).
+ */
+:root[data-theme="light"] {
+  --color-pub-bg: #ecefe1;
+  --color-pub-bg-subtle: #e2e6d4;
+  --color-pub-surface: #fbfcf8;
+  --color-pub-surface-2: #f1f4e9;
+  --color-pub-surface-hover: #e6ead9;
+
+  --color-pub-text: #151e17;
+  --color-pub-text-secondary: #3d4a3f;
+  --color-pub-muted: #5c6d5f;
+  --color-pub-on-accent: #ffffff;
+
+  --color-pub-border: #dee4d2;
+  --color-pub-border-strong: #c7d0ba;
+
+  --color-pub-accent: #4e7a16;
+  --color-pub-accent-hover: #446c13;
+  --color-pub-accent-muted: rgba(78, 122, 22, 0.1);
+  --color-pub-secondary: #187c8c;
+  --color-pub-secondary-muted: rgba(24, 124, 140, 0.1);
+  --color-pub-terra: #bd5f2a;
+  --color-pub-terra-muted: rgba(189, 95, 42, 0.12);
+
+  --color-pub-success: #227f4c;
+  --color-pub-warning: #96591a;
+  --color-pub-danger: #be4239;
+
+  --color-pub-focus-ring: var(--color-pub-accent);
+
+  --shadow-pub-sm: 0 10px 24px rgba(35, 45, 25, 0.08);
+  --shadow-pub-md: 0 16px 36px rgba(35, 45, 25, 0.1);
+}
+
+/*
+ * Movimiento — curva y duraciones propias del público (aprobadas en el
+ * artifact: "premium decel", sin overshoot), distintas de --ease-out/
+ * --duration-* del admin a propósito. Ver lib/motion-public.ts para los
+ * presets de Motion que consumen los mismos valores en JS.
+ */
+:root {
+  --pub-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --pub-duration-instant: 120ms;
+  --pub-duration-fast: 180ms;
+  --pub-duration-base: 220ms;
+  --pub-duration-slow: 240ms;
+}
+
+/* Transición compartida por los primitivos públicos (PubButton/PubChip/
+   PubCard): color/fondo/borde/sombra únicamente, igual criterio que
+   .ui-transition del admin (nunca transform ni `transition: all`) pero con
+   la curva/duración propias del público. */
+.pub-transition {
+  transition:
+    background-color var(--pub-duration-fast) var(--pub-ease),
+    border-color var(--pub-duration-fast) var(--pub-ease),
+    color var(--pub-duration-fast) var(--pub-ease),
+    box-shadow var(--pub-duration-fast) var(--pub-ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pub-transition {
+    transition: none;
+  }
+}
+
+/* El contorno público se resuelve en controls.css junto al del admin. */
+
+/* PUBLIC-R3 — pop breve al cambiar el precio estimado (Reservar): reemplaza
+   un reemplazo brusco de texto por un feedback de "esto cambió", sin
+   overshoot grande (scale tope 1.1, <300ms). El disparo (comparar el valor
+   anterior) vive en el componente; esto es solo la animación. */
+@keyframes pub-price-pop {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  40% {
+    transform: scale(1.1);
+    filter: brightness(1.25);
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+.pub-price-pop {
+  display: inline-block;
+  animation: pub-price-pop 0.3s var(--pub-ease);
+}
+@media (prefers-reduced-motion: reduce) {
+  .pub-price-pop {
+    animation: none;
+  }
+}

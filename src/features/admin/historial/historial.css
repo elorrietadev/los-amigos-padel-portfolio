@@ -1,0 +1,35 @@
+/* Sólo Historial: ocultar la barra sin deshabilitar rueda, trackpad o teclado. */
+.historial-workspace .historial-list,
+.historial-workspace .historial-detail {
+  scrollbar-width: none;
+}
+.historial-workspace .historial-list::-webkit-scrollbar,
+.historial-workspace .historial-detail::-webkit-scrollbar {
+  display: none;
+}
+
+/* Mismo criterio que reservas.css: el shell asigna el alto restante del
+   viewport a las columnas (40/60); compactar los filtros libera ese alto. */
+@media (min-width: 1200px) {
+  .historial-workspace { gap: 10px; }
+
+  .historial-filters { padding: 10px 12px; }
+  .historial-filters-title { margin-bottom: 6px; }
+  .historial-filters-body {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 10px;
+  }
+  .historial-filters-search { flex: 1 1 220px; width: auto; min-width: 0; }
+  .historial-filters-tipo { flex: 0 1 340px; min-width: 260px; }
+  .historial-filters .picker-trigger,
+  .historial-filters input:not(.sr-only) {
+    min-height: 38px;
+    height: 38px;
+    padding-block: 6px;
+  }
+
+  .historial-workspace .historial-list { padding: 12px; }
+  .historial-workspace .historial-detail { padding: 16px 18px; }
+}

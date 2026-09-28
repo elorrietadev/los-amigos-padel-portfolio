@@ -1,0 +1,77 @@
+/* Single owner of focus decoration, including legacy Tailwind ring classes.
+   Unlayered on purpose: do not stack a utility ring/offset under this outline.
+   Reset only ring shadows; keep elevation and selected-state shadows intact. */
+:where(button, a[href], input, select, textarea, summary, [role="button"], [tabindex]:not([tabindex="-1"]), .pub-focus-ring):focus-visible {
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-ring-offset-shadow: 0 0 #0000;
+  outline: 2px solid var(--control-focus, var(--color-focus-ring));
+  outline-offset: 2px;
+}
+
+:where(.pub-focus-ring, [class*="ring-pub-focus-ring"]) {
+  --control-focus: var(--color-pub-focus-ring);
+}
+
+/* Text-entry controls share the existing 1px edge. Exclude native widgets
+   and hidden validation inputs: keep their appearance and interaction.
+   `appearance: auto` is retained on number inputs, including Chrome steppers. */
+:where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="color"], [type="hidden"], [type="button"], [type="submit"], [type="reset"], [type="image"]), select, textarea):not(.sr-only) {
+  --control-edge: var(--color-border);
+  --control-hover: var(--color-border-strong);
+  border-width: 1px;
+  border-style: solid;
+}
+
+:where(input, select, textarea).pub-focus-ring {
+  --control-edge: var(--color-pub-border);
+  --control-hover: var(--color-pub-border-strong);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :where(input, select, textarea)[class~="border"]:enabled:hover:not(:focus):not([aria-invalid="true"]):not(:user-invalid) {
+    border-color: var(--control-hover, var(--color-border-strong));
+  }
+}
+
+:where(input, select, textarea)[class~="border"]:disabled {
+  border-color: var(--control-edge, var(--color-border));
+}
+
+/* A 1px outline occupies the border itself, avoiding border + ring + outline.
+   It also survives forced colors, where browsers suppress box shadows.
+   :focus deliberately covers both pointer and keyboard input/select focus. */
+:where(input, select, textarea)[class~="border"]:focus {
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-ring-offset-shadow: 0 0 #0000;
+  border-color: var(--control-focus, var(--color-focus-ring));
+  outline: 1px solid var(--control-focus, var(--color-focus-ring));
+  outline-offset: -1px;
+  box-shadow: 0 0 4px color-mix(in srgb, var(--control-focus, var(--color-focus-ring)) 18%, transparent);
+}
+
+/* Invalid stays red through hover/focus, without increasing border width.
+   :user-invalid avoids showing errors on untouched required fields. */
+:where(input, select, textarea)[class~="border"]:is([aria-invalid="true"], :user-invalid) {
+  --control-focus: var(--color-error);
+  border-color: var(--color-error);
+}
+:where(input, select, textarea).pub-focus-ring:is([aria-invalid="true"], :user-invalid) {
+  --control-focus: var(--color-pub-danger);
+  border-color: var(--color-pub-danger);
+}
+
+/* Mixed-payment amounts sit inside an overflow-hidden reveal. Keep exactly
+   one painted edge here: the lime/error border, for click AND keyboard focus.
+   No overlapping outline or clipped glow at the edges of that container. */
+input.payment-amount:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+@media (forced-colors: active) {
+  input.payment-amount:focus,
+  :where(input, select, textarea)[class~="border"]:focus {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+}

@@ -1,0 +1,39 @@
+/* Sólo composición local; colores, radios, foco y controles provienen del admin. */
+.config-week-row {
+  grid-template-columns: minmax(90px, 1fr) minmax(70px, 0.8fr) minmax(
+      150px,
+      1.5fr
+    ) auto;
+}
+.config-tabs {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-strong) transparent;
+}
+.config-tabs button {
+  min-height: 44px;
+}
+.config-tabs [role="group"] {
+  width: max-content;
+  min-width: 100%;
+}
+.config-view button:not(:disabled) {
+  cursor: pointer;
+}
+.config-view .config-add-button {
+  white-space: normal;
+  height: auto;
+  min-height: 44px;
+  padding-block: 10px;
+}
+@media (max-width: 540px) {
+  .config-week-row {
+    grid-template-columns: 1fr auto;
+    gap: 8px 12px;
+  }
+  .config-week-row > :nth-child(2) {
+    justify-self: end;
+  }
+  .config-week-row > :nth-child(4) {
+    justify-self: end;
+  }
+}

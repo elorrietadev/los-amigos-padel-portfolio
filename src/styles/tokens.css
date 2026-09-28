@@ -1,0 +1,236 @@
+/*
+ * Design tokens — R1 del rediseño grande ("Court Graphite", dirección visual
+ * aprobada). Reemplaza la paleta legacy extraída de admin.html/index.html/
+ * baja.html (ver historial git) por un sistema de dos temas reales.
+ *
+ * Cómo está organizado:
+ *   1. @theme:  declara los tokens con sus valores DARK (tema por defecto).
+ *      Tailwind v4 (CSS-first) convierte cada uno en una custom property real
+ *      bajo :root Y en las utilities correspondientes (--color-x -> bg-x/
+ *      text-x/border-x/ring-x..., --radius-x -> rounded-x, --shadow-x ->
+ *      shadow-x, --text-x -> text-x tamaño+line-height, --font-x -> font-x).
+ *   2. :root[data-theme="light"]: redefine las mismas custom properties con
+ *      valores LIGHT propios (NO son los valores dark invertidos/aclarados
+ *      automáticamente — cada uno fue calibrado a mano, ver notas de
+ *      contraste más abajo).
+ *   3. :root plano: tokens que no son "de tema" (duraciones, blur, opacidad
+ *      de disabled) — ya vivían acá antes de esta tanda, se mantienen igual.
+ *
+ * Aplicación del tema: atributo data-theme en <html>, puesto por
+ * web/public/theme-init.js (antes del primer paint, evita flash) y por
+ * src/lib/theme.tsx (ThemeProvider/useTheme) en tiempo de ejecución. Todavía
+ * no hay botón visible para cambiarlo — eso es R2, junto con la Sidebar.
+ *
+ * Nombres NO tocados a propósito (siguen igual que en la paleta legacy)
+ * porque tienen uso masivo en el código ya migrado y renombrarlos exigiría
+ * tocar docenas de archivos fuera del alcance de R1 (ver AdminShell,
+ * ReservasView, VenderView, etc.):
+ *   --color-bg / --color-surface / --color-surface-2 / --color-border /
+ *   --color-text / --color-muted / --color-accent / --color-warning /
+ *   --color-error / --color-success / --font-heading / --font-body /
+ *   --radius-md / --radius-lg / --radius-pill / --shadow-card /
+ *   --shadow-glow-accent / --ease-out
+ * Solo se les recalibró el VALOR a la paleta Court Graphite (dark+light);
+ * ninguna clase existente en el código necesita cambiar para adoptarlo.
+ *
+ * Decisión de nombres — "danger" vs "error": la dirección aprobada pide un
+ * rol semántico "danger/danger-muted", pero el código ya tiene 61 usos de
+ * `error`/`bg-error`/`text-error` (ConfirmModal, Toast, DevolucionModal,
+ * etc.). Se mantiene UN solo nombre (`error`) para ese rol en vez de crear
+ * un token paralelo idéntico con otro nombre — los componentes nuevos
+ * (Button variant="destructive", Badge variant="danger") exponen el
+ * vocabulario pedido en su API pública y por dentro consumen `error`.
+ *
+ * Decisión de nombres — "text-secondary": genera la utility `text-text-secondary`
+ * (doble "text"), no `text-secondary` — ese nombre ya está tomado por
+ * `--color-secondary` (el cian de marca). Sigue el mismo patrón que el ya
+ * existente `--color-text` -> `text-text` (94 usos), no es una rareza nueva.
+ *
+ * Decisión — "info": no se inventó un tercer matiz de color. `--color-info`
+ * es un alias de `--color-secondary` (mismo cian) porque el cian YA es el
+ * color "informativo" de este sistema (turnos fijos en la futura Agenda,
+ * badges neutrales-pero-destacados) — dos nombres, un solo valor real.
+ *
+ * Decisión — "disabled": no es un color (no existe un hex que funcione igual
+ * de bien encima de cada superficie/acento). Se implementa como
+ * --opacity-disabled, un multiplicador de opacidad que los primitivos nuevos
+ * aplican vía disabled:opacity-[var(--opacity-disabled)] — estandariza los
+ * 3 valores distintos (50/60/70) que el código legacy usaba sin criterio.
+ *
+ * Ajustes de contraste sobre los hex LIGHT tal como se pidieron (permitido
+ * explícitamente: "podés ajustar valores... documentar cualquier ajuste"):
+ *   --color-accent  (light): #5D8A1B -> #567E17
+ *     Texto blanco sobre este acento pasaba de 4.10:1 a 4.78:1. El texto de
+ *     los botones (13-15px semibold) NO llega al umbral de "texto grande" de
+ *     WCAG (necesita 18.66px bold o 24px regular), así que el mínimo AA real
+ *     es 4.5:1, no 3:1 — 4.10:1 se quedaba corto.
+ *   --color-warning (light): #A8681B -> #9C5F19
+ *     Mismo motivo: 4.50:1 quedaba exacto en el límite, sin margen de error
+ *     ante variaciones de renderizado de fuente. Ahora 5.16:1.
+ * Todos los demás hex LIGHT coinciden exactamente con los que se aprobaron.
+ */
+@theme {
+  /* ---------- Fondos ---------- */
+  --color-bg: #0a0e0c; /* bg-app */
+  --color-bg-subtle: #0d120f; /* NUEVO — nivel entre bg-app y surface, para separar zonas sin usar una card */
+  --color-surface: #141b17; /* bg-surface */
+  --color-surface-2: #1b2420; /* bg-surface-secondary (superficie anidada: inputs, chips, header de tabla) */
+  --color-surface-elevated: #212c26; /* NUEVO — bg-surface-elevated (drawers/popovers/menús, futuro) */
+  --color-surface-hover: #1f2a24; /* NUEVO — fondo de hover para Button secondary/ghost e IconButton */
+  --color-surface-glass: rgba(20, 34, 27, 0.55); /* vidrio esmerilado — reservado a sidebar/header/overlays puntuales (ver sección 3 del pedido), AdminLogin ya lo usa */
+
+  /* ---------- Texto ---------- */
+  --color-text: #f3faf5; /* text-primary */
+  --color-text-secondary: #c3d2c9; /* NUEVO — tercer nivel, entre text y muted (ver nota de nombres arriba) */
+  --color-muted: #9fb3a8; /* text-muted */
+  --color-on-accent: #0a0e0c; /* NUEVO — texto sobre fondos de acento/success (bg-accent, bg-success). Reemplaza el hack existente de usar text-bg para esto, que se rompe en light (ver informe) */
+
+  /* ---------- Bordes ---------- */
+  --color-border: #263229;
+  --color-border-strong: #34453a; /* NUEVO */
+
+  /* ---------- Marca ---------- */
+  --color-accent: #c7f24e;
+  --color-accent-hover: #b3db3c; /* NUEVO */
+  --color-accent-muted: rgba(199, 242, 78, 0.14); /* NUEVO — fondo tenue para badges/estados activos */
+  --color-secondary: #5fc9d6; /* NUEVO — cian, turnos fijos / acentos secundarios */
+  --color-secondary-muted: rgba(95, 201, 214, 0.14); /* NUEVO */
+
+  /* ---------- Semánticos ---------- */
+  --color-success: #57be8c;
+  --color-success-muted: rgba(87, 190, 140, 0.14); /* NUEVO */
+  --color-warning: #f2b86d;
+  --color-warning-muted: rgba(242, 184, 109, 0.14); /* NUEVO */
+  --color-error: #f2726b;
+  --color-error-muted: rgba(242, 114, 107, 0.14); /* NUEVO */
+  --color-info: var(--color-secondary); /* NUEVO — alias intencional, ver nota arriba */
+  --color-info-muted: var(--color-secondary-muted); /* NUEVO */
+
+  /* ---------- Interacción ---------- */
+  --color-focus-ring: var(--color-accent); /* NUEVO — alias intencional: mismo valor que ya se usaba a mano (focus-visible:ring-accent) en todo el código, ahora con nombre semántico */
+  --color-overlay: rgba(5, 10, 7, 0.72); /* NUEVO — backdrop de modales/drawers; ConfirmModal sigue con su valor hardcodeado propio (fuera de alcance de R1), casi idéntico */
+
+  /* ---------- Tipografía ---------- */
+  --font-heading: "Oswald", sans-serif;
+  --font-body: "Inter", sans-serif; /* Work Sans se retira — ver informe */
+
+  /* Escala semántica — evita hardcodear 13px/14px/15px sueltos en pantallas
+     futuras. Cada uno trae su line-height emparejado (sintaxis --text-x--line-height
+     de Tailwind v4, la misma que usa su escala por defecto). */
+  --text-display: 2.75rem; /* 44px — números hero (ej. neto de Caja) */
+  --text-display--line-height: 1.05;
+  --text-page-title: 1.75rem; /* 28px — título de página, Oswald */
+  --text-page-title--line-height: 1.15;
+  --text-section-title: 1.125rem; /* 18px — título de sección dentro de una vista */
+  --text-section-title--line-height: 1.3;
+  --text-body: 0.9375rem; /* 15px — cuerpo/formularios/UI general */
+  --text-body--line-height: 1.55;
+  --text-body-sm: 0.8125rem; /* 13px — tablas, agenda, POS, UI densa */
+  --text-body-sm--line-height: 1.5;
+  --text-label: 0.6875rem; /* 11px — labels de formulario, badges (uppercase+tracking se agrega aparte) */
+  --text-label--line-height: 1.3;
+  --text-caption: 0.6875rem; /* 11px — timestamps, ayudas, texto secundario chico (sin uppercase) */
+  --text-caption--line-height: 1.4;
+
+  /* ---------- Radios ---------- */
+  --radius-sm: 8px; /* NUEVO */
+  --radius-md: 12px; /* antes 10px */
+  --radius-lg: 20px; /* antes 18px */
+  --radius-xl: 28px; /* NUEVO — reservado para la futura sidebar flotante (R2) */
+  --radius-pill: 999px;
+
+  /* ---------- Sombras ---------- */
+  /* Escala nueva para los primitivos de R1 (Card elevated, futuros drawers). */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 12px 28px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 28px 64px rgba(0, 0, 0, 0.5);
+  /* Se mantienen — AdminLogin ya las usa tal cual (var(--shadow-card)/var(--shadow-glow-accent)). */
+  --shadow-card: 0 8px 28px rgba(0, 0, 0, 0.4);
+  --shadow-glow-accent: 0 0 18px rgba(199, 242, 78, 0.14);
+
+  /* ---------- Movimiento ---------- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/*
+ * Tema LIGHT — Court Graphite. Se activa con <html data-theme="light">.
+ * No es una inversión del dark: cada rol tiene su propio hex calibrado para
+ * fondo claro (ver notas de contraste en el encabezado del archivo).
+ */
+/*
+ * R9.1 — retinte de fondo (light se sentía "hoja en blanco": bg/surface/
+ * surface-2 estaban casi al mismo valor, sin capas visibles). Se baja el
+ * brillo/se tiñe SOLO --color-bg/--color-bg-subtle (el fondo general de la
+ * página) y se corrige --color-surface-2/--color-surface-hover para que
+ * queden ordenados de forma monótona entre bg y surface (antes surface-2
+ * quedaba, por muy poco, más oscuro que bg — casi imperceptible pero al
+ * revés de lo esperado). En R9.1 --color-surface se mantenía blanco puro
+ * (pedido explícito: "mantener cards/surfaces más claras para generar
+ * capas") — el contraste bg(tintado)/surface(blanco) es lo que ahora separa
+ * "página" de "card". Bordes y colores semánticos NO se tocan: sus ajustes
+ * de contraste (ver notas de cabecera del archivo) siguen siendo válidos,
+ * calibrados contra texto/superficies que no cambiaron.
+ */
+:root[data-theme="light"] {
+  --color-bg: #e7ebdd;
+  --color-bg-subtle: #dde3d0;
+  --color-surface: #f7f9f3; /* pulido: surface clara, elevated blanco */
+  --color-surface-2: #eef2e5;
+  --color-surface-elevated: #ffffff;
+  --color-surface-hover: #e2e8d4;
+  --color-surface-glass: rgba(255, 255, 255, 0.6);
+
+  --color-text: #131c16;
+  --color-text-secondary: #3c4a40;
+  --color-muted: #5a6b5e;
+  --color-on-accent: #ffffff;
+
+  --color-border: #dee4d6;
+  --color-border-strong: #c6cfbb;
+
+  --color-accent: #567e17; /* ajustado, ver nota de contraste arriba */
+  --color-accent-hover: #4c7315;
+  --color-accent-muted: rgba(86, 126, 23, 0.1);
+  --color-secondary: #187c8c;
+  --color-secondary-muted: rgba(24, 124, 140, 0.1);
+
+  --color-success: #22824f;
+  --color-success-muted: rgba(34, 130, 79, 0.1);
+  --color-warning: #9c5f19; /* ajustado, ver nota de contraste arriba */
+  --color-warning-muted: rgba(156, 95, 25, 0.1);
+  --color-error: #c1443e;
+  --color-error-muted: rgba(193, 68, 62, 0.1);
+  --color-info: var(--color-secondary);
+  --color-info-muted: var(--color-secondary-muted);
+
+  --color-focus-ring: var(--color-accent);
+  --color-overlay: rgba(19, 28, 22, 0.45);
+
+  --shadow-sm: 0 1px 2px rgba(20, 30, 20, 0.06);
+  --shadow-md: 0 12px 28px rgba(20, 30, 20, 0.08);
+  --shadow-lg: 0 28px 56px rgba(20, 30, 20, 0.1);
+  --shadow-card: 0 8px 24px rgba(20, 30, 20, 0.08);
+  --shadow-glow-accent: 0 0 0 rgba(0, 0, 0, 0); /* sin glow en light — el glow es un recurso de superficie oscura */
+
+  color-scheme: light;
+}
+
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+/*
+ * Tokens que NO son "de tema" (mismo valor en dark y light) — ya vivían acá
+ * antes de esta tanda, fuera de @theme por el mismo motivo original: no hay
+ * namespace --duration-/--blur- documentado en Tailwind v4 que genere
+ * utilities automáticamente, así que no correspondía insinuar que
+ * "duration-fast" existe como clase.
+ */
+:root {
+  --duration-fast: 150ms; /* .tap-fx, .hover-lift, .ui-transition */
+  --duration-base: 250ms; /* modales, paneles, cambio de tema */
+  --duration-slow: 500ms; /* entrada de Reveal */
+  --blur-glass: 14px; /* backdrop-filter de las cards "vidrio esmerilado" */
+  --opacity-disabled: 0.55; /* NUEVO — disabled:opacity-[var(--opacity-disabled)] en los primitivos de R1 */
+}

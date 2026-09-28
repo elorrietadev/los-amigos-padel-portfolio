@@ -1,0 +1,48 @@
+/* Sólo Reservas: ocultar la barra sin deshabilitar rueda, trackpad o teclado. */
+.reservas-workspace .admin-workspace-list,
+.reservas-workspace .reserva-detail-body {
+  scrollbar-width: none;
+}
+.reservas-workspace .admin-workspace-list::-webkit-scrollbar,
+.reservas-workspace .reserva-detail-body::-webkit-scrollbar {
+  display: none;
+}
+
+/* El shell ya asigna el alto restante del viewport a las columnas (55/45).
+   Compactar los bloques fijos libera ese alto sin otro scroll ni offsets. */
+@media (min-width: 1200px) {
+  .reservas-workspace { gap: 10px; }
+
+  .reservas-metrics > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-content: start;
+    align-items: center;
+    gap: 4px 12px;
+    padding: 10px 12px;
+  }
+  .reservas-metrics > div > div { margin-top: 0; }
+  .reservas-metrics > div > div:nth-child(2) {
+    font-size: 22px;
+    line-height: 28px;
+  }
+  .reservas-metrics > div > div:nth-child(3) { height: 6px; }
+
+  .reservas-filters { padding: 10px 12px; }
+  .reservas-filters > div:nth-child(2) { margin-top: 8px; }
+  .reservas-filters .picker-trigger,
+  .reservas-filters input:not(.sr-only) {
+    min-height: 36px;
+    height: 36px;
+    padding-block: 6px;
+  }
+
+  .reservas-workspace .admin-workspace-list { padding: 10px; }
+  .reservas-workspace .admin-workspace-list > div:has(> [role="switch"]) {
+    margin-top: 8px;
+    padding-top: 4px;
+  }
+  .reservas-workspace [role="switch"] { min-height: 36px; }
+  .reservas-workspace .admin-workspace-list > section { margin-top: 8px; }
+  .reservas-workspace .admin-reserva-detail { padding: 12px; }
+}
