@@ -104,7 +104,7 @@ React 19 · TypeScript 5.7 · Vite 8 · Tailwind CSS 4 · Supabase (PostgreSQL, 
 
 ## 🔐 Seguridad
 
-- **Reserva pública gateada**: Turnstile (verificación humana) + gateway con clave compartida y rate limit antes de cualquier escritura; `crear_reserva` no es invocable directamente por PostgREST.
+- **Reserva pública gateada**: Turnstile + gateway con clave compartida y rate limit antes de cualquier escritura; `crear_reserva` no es invocable directamente por PostgREST.
 - **RLS en todas las tablas operativas**: el rol anónimo solo ve vistas públicas explícitas y acotadas, nunca la tabla completa.
 - **Funciones `SECURITY DEFINER`** con permisos revocados explícitamente donde no corresponden — `REVOKE ALL FROM PUBLIC` no alcanza si `anon`/`authenticated` siguen con acceso heredado.
 - **Integridad a nivel de base**: exclusion constraint contra solapamiento de horarios, independiente de cualquier validación de cliente.
